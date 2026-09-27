@@ -28,7 +28,7 @@ function finishArrival() {
   }
   $('teaser').className = 'teaser is-ready'; $('teaser').setAttribute('aria-busy', 'false');
   $('load-status').textContent = '3D scene ready';
-  document.querySelectorAll('button[disabled], input[disabled]').forEach(el => el.disabled = false);
+  $('teaser').querySelectorAll('button[disabled], input[disabled], select[disabled]').forEach(el => el.disabled = false);
   state.ready = true; progress(); play(!reducedMotion.matches);
 }
 
@@ -211,6 +211,7 @@ function error(message) {
   $('teaser').className = 'teaser has-error'; $('teaser').setAttribute('aria-busy', 'false');
   $('loading').hidden = false; $('load-progress').hidden = true;
   $('load-status').textContent = message;
+  $('teaser').querySelectorAll('.playback button, .playback input, .playback select, .actions button').forEach(el => el.disabled = true);
 }
 async function init() {
   const response = await fetch('./assets/scene.json?v=3');

@@ -153,6 +153,9 @@ button, select { color: inherit; }
 button { cursor: pointer; touch-action: manipulation; transition: transform 240ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease, background-color 160ms ease, color 160ms ease; user-select: none; -webkit-user-select: none; }
 button:active:not(:disabled) { transform: scale(.93); transition-duration: 80ms; }
 button:disabled { cursor: wait; opacity: .42; }
+.teaser .playback button, .teaser .actions button { transition: transform 240ms var(--ease-out), box-shadow 200ms ease, background-color 160ms ease, color 160ms ease, opacity 240ms ease; }
+.teaser .playback button:disabled, .teaser .actions button:disabled { opacity: .72; }
+.teaser:not(.is-ready) .playback, .teaser:not(.is-ready) .actions { pointer-events: none; }
 button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid #0071e3a0; outline-offset: 4px; }
 svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
 .view-tools button { display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 22px; background: transparent; height: 38px; min-width: 40px; padding: 0 13px; font-size: .75rem; font-weight: 500; }
@@ -231,14 +234,14 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
 .caption-slot { height: 3.2em; margin: 25px auto 5px; font-size: 1rem; }
 .caption { text-align: center; font-size: 1rem; letter-spacing: -.015em; line-height: 1.6; min-height: 1.6em; margin: 0; color: #515156; }
 .control-note { text-align: center; font-size: .75rem; color: #85858b; margin: 7px 0 0; }
-.loading { position: absolute; inset: 0; z-index: 5; background: #f5f5f7; }
+.loading { position: absolute; inset: 0; z-index: 2; background: #f5f5f7; }
 .loading[hidden] { display: none; }
 #load-progress { position: absolute; top: 0; left: 0; width: 100%; height: 3px; border: 0; appearance: none; background: transparent; }
 #load-progress::-webkit-progress-bar { background: transparent; }
 #load-progress::-webkit-progress-value { background: #929298; transition: width 180ms ease; }
 #load-progress::-moz-progress-bar { background: #929298; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.teaser:not(.is-ready) .viewer-topbar, .teaser:not(.is-ready) .playback, .teaser:not(.is-ready) .viewer-hint, .teaser:not(.is-ready) .actions { visibility: hidden; opacity: 0; pointer-events: none; }
+.teaser:not(.is-ready) .viewer-topbar, .teaser:not(.is-ready) .viewer-hint { visibility: hidden; opacity: 0; pointer-events: none; }
 .teaser.is-loading #viewport, .teaser.has-error #viewport { visibility: hidden; }
 .teaser.has-error .caption { display: none; }
 .caption[hidden] { display: none; }
@@ -343,7 +346,7 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   .control-note { font-size: .6875rem; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .speed-menu, #speed-toggle svg, .loop-off-line, #loop::before, #loop::after { transition: none; }
+  .speed-menu, #speed-toggle svg, .loop-off-line, #loop::before, #loop::after, .teaser .playback button, .teaser .actions button { transition: none; }
   .spinner { animation: none; }
   button, select, .action .dot, .action::after, .view-tools svg, .icon-button svg, .scrub-time, .timeline-thumb, .timeline-thumb::before, .play-button::before, .play-button::after, .selection-indicator, .selection-indicator::after { transition: none; }
   button:hover, button:active:not(:disabled), button.is-pressed:not(:disabled), select:hover, select.is-pressed, .action:hover .dot, .view-tools button:hover svg, .icon-button:hover svg { transform: none; }
