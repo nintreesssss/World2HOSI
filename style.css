@@ -24,15 +24,18 @@ h1 { margin: 0; font-optical-sizing: auto; }
 .paper-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) { .paper-link:hover { transform: translateY(-2px); background: #fff; border-color: #adc6df; box-shadow: inset 0 1px 0 #fff, 0 5px 16px #315c8714; } }
 .paper-link:active { transform: scale(.96); transition-duration: 90ms; background: #e5eff9; }
+/* Official small arXiv mark: https://info.arxiv.org/brand/logos.html */
+.paper-link .arxiv-logomark { display: block; width: 18px; height: 20px; object-fit: contain; }
 .paper-link:focus-visible { outline: 2px solid #397dbb; outline-offset: 4px; }
 .site-footer { border-top: 1px solid #ffffff20; background: linear-gradient(110deg, #20364d, #466079 65%, #73889b); color: #f4f7fb; padding: 10px 48px; }
 .site-footer p { max-width: 1240px; margin: auto; font-size: .75rem; line-height: 1.5; letter-spacing: .005em; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
 .site-footer strong { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) { .paper-link { transition: none; } .paper-link:hover, .paper-link:active { transform: none; } }
 @media (forced-colors: active) { .project-name { background: none; -webkit-text-fill-color: CanvasText; } }
+.abstract-heading h2, .method-heading h2, .video-showcase > h2, .comparisons > h2 { color: #3977b0; font-family: inherit; font-style: normal; }
 .teaser { width: 100%; }
 .comparisons { max-width: 1112px; margin: 88px auto 16px; }
-.comparisons > h2 { margin: 0 8px 28px; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
+.comparisons > h2 { margin: 0 8px 28px; font-size: 2.1875rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
 .comparison-row { margin: 0 0 48px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .comparison-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #bbc5d2 transparent; }
 .comparison-scroll:focus-visible { outline: 2px solid #0071e3a0; outline-offset: -2px; border-radius: 12px; }
@@ -45,13 +48,13 @@ h1 { margin: 0; font-optical-sizing: auto; }
 .comparison-row figcaption { padding: 12px 0 0; color: #62626a; font-size: .9375rem; line-height: 1.7; text-align: center; }
 @media (max-width: 700px) {
   .comparisons { margin-top: 56px; }
-  .comparisons > h2 { margin: 0 4px 20px; font-size: 1.75rem; }
+  .comparisons > h2 { margin: 0 4px 20px; font-size: 1.875rem; }
   .comparison-row { margin-bottom: 36px; }
   .comparison-strip { min-width: 840px; }
   .comparison-row figcaption { padding: 12px 0 0; text-align: center; }
 }
 .video-showcase { margin-top: 88px; }
-.video-showcase > h2 { margin: 0 8px 36px; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
+.video-showcase > h2 { margin: 0 8px 36px; font-size: 2.1875rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
 .video-group + .video-group { margin-top: 64px; }
 .video-group > h3 { margin: 0 8px 22px; font-size: 1.375rem; font-weight: 550; letter-spacing: -.025em; line-height: 1.3; color: #414852; }
 .video-grid { display: grid; gap: 24px; align-items: stretch; }
@@ -105,7 +108,7 @@ h1 { margin: 0; font-optical-sizing: auto; }
 }
 @media (max-width: 700px) {
   .video-showcase { margin-top: 56px; }
-  .video-showcase > h2 { margin: 0 4px 28px; font-size: 1.75rem; }
+  .video-showcase > h2 { margin: 0 4px 28px; font-size: 1.875rem; }
   .wide .video-player video { border-radius: 16px; }
   .video-group + .video-group { margin-top: 44px; }
   .video-group > h3 { margin: 0 4px 18px; font-size: 1.1875rem; }
@@ -119,7 +122,7 @@ h1 { margin: 0; font-optical-sizing: auto; }
 }
 .method-overview { margin: 88px auto 16px; }
 .method-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin: 0 8px 28px; }
-.method-heading h2 { margin: 0; font-size: 2rem; line-height: 1.2; font-weight: 600; letter-spacing: -.045em; }
+.method-heading h2 { margin: 0; font-size: 2.1875rem; line-height: 1.2; font-weight: 600; letter-spacing: -.045em; }
 .method-heading > span { color: var(--secondary); font-size: .9375rem; }
 .pipeline-figure { margin: 0; padding: 22px 20px 60px; border-radius: 28px; background: #fff; border: 1px solid #eceef2; box-shadow: 0 16px 48px -30px #33466624; }
 .pipeline-open { position: relative; display: block; color: #394352; border-radius: 12px; cursor: zoom-in; text-decoration: none; }
@@ -144,7 +147,7 @@ html.pipeline-modal-open { overflow: hidden; }
 @media (max-width: 700px) {
   .method-overview { margin-top: 56px; }
   .method-heading { display: block; margin: 0 4px 20px; }
-  .method-heading h2 { font-size: 1.75rem; margin-bottom: 10px; }
+  .method-heading h2 { font-size: 1.875rem; margin-bottom: 10px; }
   .method-heading > span { font-size: .875rem; }
   .pipeline-figure { padding: 12px 8px 56px; border-radius: 20px; }
   .pipeline-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 24px); border-radius: 20px; }
@@ -159,7 +162,7 @@ html.pipeline-modal-open { overflow: hidden; }
 }
 .abstract { position: relative; isolation: isolate; display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 48px; max-width: 1112px; margin: 80px auto 16px; padding: 52px 56px; border: 1px solid #eef0f4; border-radius: 32px; background: linear-gradient(130deg, #f8fafdfa, #fffffff2 55%, #faf8fcf5); box-shadow: inset 0 1px 0 #fff, 0 16px 48px -30px #33466624; }
 .abstract::before { content: ''; position: absolute; z-index: -1; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(ellipse at 0 0, #3175b410, transparent 42%), radial-gradient(ellipse at 100% 100%, #bb42850a, transparent 40%); }
-.abstract-heading h2 { margin: 0; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.15; }
+.abstract-heading h2 { margin: 0; font-size: 2.1875rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.15; }
 .abstract-copy { min-width: 0; color: #48484e; font-size: 1.0625rem; line-height: 1.85; letter-spacing: -.012em; }
 .abstract-copy p { margin: 0 0 1.15em; }
 .abstract-copy p:last-child { margin-bottom: 0; }
@@ -171,7 +174,7 @@ html.pipeline-modal-open { overflow: hidden; }
 @media (max-width: 700px) {
   .abstract { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 52px; padding: 30px 24px; border-radius: 24px; }
   .abstract-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-  .abstract-heading h2 { order: -1; margin: 0; font-size: 1.75rem; }
+  .abstract-heading h2 { order: -1; margin: 0; font-size: 1.875rem; }
   .abstract-copy { font-size: 1rem; line-height: 1.8; }
 }
 @media (prefers-contrast: more) {
