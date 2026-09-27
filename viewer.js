@@ -214,7 +214,7 @@ function error(message) {
   $('teaser').querySelectorAll('.playback button, .playback input, .playback select, .actions button').forEach(el => el.disabled = true);
 }
 async function init() {
-  const response = await fetch('./assets/scene.json?v=3');
+  const response = await fetch('./assets/scene.json?v=4');
   if (!response.ok) throw new Error('Scene configuration is unavailable. Please reload the page.');
   config = await response.json();
   arrivalProgress.value = reducedMotion.matches ? 1 : 0;
