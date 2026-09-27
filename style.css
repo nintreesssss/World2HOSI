@@ -11,10 +11,25 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: var(--ink); -webkit-font-smoothing: antialiased; }
 main { max-width: 1336px; padding: 0 48px 64px; margin: auto; }
-.paper-heading { text-align: center; padding: 72px 0 45px; }
-h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
-.project-name { display: block; font-size: clamp(3rem, 5.2vw, 4.5rem); line-height: 1.07; letter-spacing: -.055em; font-weight: 650; margin-bottom: 20px; }
-.paper-title { display: block; font-size: clamp(1.4rem, 2.1vw, 1.8rem); line-height: 1.42; letter-spacing: -.026em; font-weight: 450; color: var(--secondary); text-wrap: balance; }
+/* A quiet, full-width title band and a typographic blue wordmark. */
+.paper-heading { text-align: center; padding: 58px 24px 42px; margin-bottom: 32px; background: radial-gradient(ellipse at 50% 0%, #e2edf8 0%, transparent 68%), linear-gradient(115deg, #f1f5f8, #f7f9fc 54%, #edf3f8); border-bottom: 1px solid #d9e4ee; }
+h1 { margin: 0; font-optical-sizing: auto; }
+.project-name { display: inline-block; padding: 0 .06em .07em; margin-bottom: 17px; font-size: clamp(3.7rem, 6.8vw, 6rem); line-height: 1.08; letter-spacing: -.055em; color: #3977b0; background: linear-gradient(110deg, #35699c 5%, #659aca 45%, #4c83b8 70%, #41679c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.wordmark-world { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; letter-spacing: -.065em; }
+.wordmark-two { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: .79em; padding-inline: .025em .055em; }
+.wordmark-hosi { font-weight: 600; letter-spacing: -.055em; }
+.paper-title { display: block; max-width: 850px; margin: auto; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.5; letter-spacing: -.018em; font-weight: 400; color: #4e6175; text-wrap: balance; }
+.paper-links { display: flex; justify-content: center; gap: 12px; margin-top: 26px; }
+.paper-link { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 10px 22px; border: 1px solid #cbd9e6; border-radius: 999px; background: #ffffffb8; box-shadow: inset 0 1px 0 #fff, 0 2px 4px #344e6806; color: #375d81; font-size: .9375rem; line-height: 1.4; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform 220ms var(--ease-out), background 180ms ease, box-shadow 220ms ease, border-color 180ms ease; }
+.paper-link svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+@media (hover: hover) { .paper-link:hover { transform: translateY(-2px); background: #fff; border-color: #adc6df; box-shadow: inset 0 1px 0 #fff, 0 5px 16px #315c8714; } }
+.paper-link:active { transform: scale(.96); transition-duration: 90ms; background: #e5eff9; }
+.paper-link:focus-visible { outline: 2px solid #397dbb; outline-offset: 4px; }
+.site-footer { border-top: 1px solid #ffffff20; background: linear-gradient(110deg, #20364d, #466079 65%, #73889b); color: #f4f7fb; padding: 20px 48px; }
+.site-footer p { max-width: 1240px; margin: auto; font-size: .75rem; line-height: 1.6; letter-spacing: .005em; }
+.site-footer strong { font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .paper-link { transition: none; } .paper-link:hover, .paper-link:active { transform: none; } }
+@media (forced-colors: active) { .project-name { background: none; -webkit-text-fill-color: CanvasText; } }
 .teaser { width: 100%; }
 .comparisons { max-width: 1112px; margin: 88px auto 16px; }
 .comparisons > h2 { margin: 0 8px 28px; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
@@ -338,9 +353,10 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
 .play-button.is-pressed::after, .play-button:active::after { opacity: 1; }
 @media (max-width: 760px) {
   main { padding: 0 18px 38px; }
-  .paper-heading { padding: 43px 8px 32px; }
-  .project-name { font-size: 3rem; letter-spacing: -.055em; margin-bottom: 16px; }
-  .paper-title { font-size: 1.25rem; line-height: 1.4; letter-spacing: -.03em; }
+  .paper-heading { padding: 42px 18px 30px; margin-bottom: 20px; }
+  .project-name { font-size: clamp(2.9rem, 11vw, 4.5rem); margin-bottom: 14px; }
+  .paper-title { font-size: 1.125rem; line-height: 1.5; letter-spacing: -.015em; }
+  .site-footer { padding: 18px; }
   .desktop-break { display: none; }
   .viewer-shell { height: 530px; border-radius: 24px; }
   .viewer-topbar { inset: 12px 12px auto; }

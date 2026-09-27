@@ -8,14 +8,18 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI: A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
+  <header class="paper-heading">
+    <h1><span class="project-name"><span class="wordmark-world">World</span><span class="wordmark-two">2</span><span class="wordmark-hosi">HOSI</span></span><span class="paper-title">A Multi-Expert Harness for Long-Horizon<br class="desktop-break"> Human-Object-Scene Interaction Generation</span></h1>
+    <nav class="paper-links" aria-label="Paper resources">
+      <a class="paper-link" href="about:blank" target="_blank" rel="noopener noreferrer" aria-label="Paper (placeholder, opens a blank tab)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Z"/><path d="M14 3v5h5M8 13h8M8 17h6"/></svg><span>Paper</span></a>
+      <a class="paper-link" href="about:blank" target="_blank" rel="noopener noreferrer" aria-label="arXiv (placeholder, opens a blank tab)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 3 12 18M18 3 6 21M9 7l6 10"/></svg><span>arXiv</span></a>
+    </nav>
+  </header>
   <main>
-    <header class="paper-heading">
-      <h1><span class="project-name">World2HOSI</span><span class="paper-title">A Multi-Expert Harness for Long-Horizon<br class="desktop-break"> Human-Object-Scene Interaction Generation</span></h1>
-    </header>
     <section class="teaser is-loading" id="teaser" aria-label="Interactive 3D teaser" aria-busy="true">
       <div class="viewer-shell" id="viewer-shell">
         <div id="viewport" role="img" aria-label="Interactive reconstructed home with six animated human-object interactions"></div>
@@ -89,7 +93,7 @@
       <section class="video-group" aria-labelledby="long-horizon-title"><h3 id="long-horizon-title">Long-horizon tasks</h3><div class="video-grid two wide">
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/long-coffee.webp" src="assets/videos/long-coffee.mp4" aria-label="Move, drink, and sit" aria-describedby="long-coffee-instruction" data-duration="40.75"></video>
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/long-coffee.webp" src="assets/videos/long-coffee.mp4" aria-label="Move, drink, and sit" aria-describedby="long-coffee-instruction" data-duration="40.75"></video>
             <div class="video-controls" hidden>
               <button class="video-toggle play-button" aria-label="Play Move, drink, and sit"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
               <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="40.75" value="0" step="0.01" aria-label="Seek Move, drink, and sit"><span class="timeline-thumb" aria-hidden="true"></span></div>
@@ -102,7 +106,7 @@
         </figure>
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/long-books.webp" src="assets/videos/long-books.mp4" aria-label="Carry, rearrange, and sit" aria-describedby="long-books-instruction" data-duration="42.933"></video>
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/long-books.webp" src="assets/videos/long-books.mp4" aria-label="Carry, rearrange, and sit" aria-describedby="long-books-instruction" data-duration="42.933"></video>
             <div class="video-controls" hidden>
               <button class="video-toggle play-button" aria-label="Play Carry, rearrange, and sit"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
               <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="42.933" value="0" step="0.01" aria-label="Seek Carry, rearrange, and sit"><span class="timeline-thumb" aria-hidden="true"></span></div>
@@ -215,12 +219,13 @@
       </figure>
     </section>
   </main>
+  <footer class="site-footer"><p><strong>World2HOSI:</strong> A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</p></footer>
   <dialog class="pipeline-dialog" aria-labelledby="pipeline-dialog-title">
     <div class="pipeline-toolbar"><h2 id="pipeline-dialog-title">Pipeline</h2><div><button id="pipeline-zoom" aria-pressed="false">Zoom in</button><button id="pipeline-close" aria-label="Close diagram" autofocus><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div></div>
     <div class="pipeline-scroll" tabindex="0" aria-label="Pipeline diagram. Scroll to zoom, drag to pan. Use plus or minus to zoom, arrow keys to pan, and zero to reset."><img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" draggable="false" alt="Enlarged World2HOSI framework diagram. Scene standardization, task planning, multi-expert generation and physical simulation are connected through persistent world updates."></div>
   </dialog>
   <script type="module" src="ui.js?v=11"></script>
   <script type="module" src="viewer.js?v=15"></script>
-  <script type="module" src="videos.js?v=4"></script>
+  <script type="module" src="videos.js?v=5"></script>
 </body>
 </html>

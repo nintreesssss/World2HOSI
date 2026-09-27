@@ -1,4 +1,4 @@
-// Short examples autoplay independently; long clips keep custom playback controls.
+// All examples autoplay independently; long clips retain custom playback controls.
 const demoPlayers = [...document.querySelectorAll('.video-player')];
 const formatVideoTime = seconds => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 for (const player of demoPlayers) {
@@ -10,13 +10,6 @@ for (const player of demoPlayers) {
     video.addEventListener('playing', () => { error.hidden = true; });
     continue;
   }
-  // Only coordinate user-controlled long clips; autoplay examples remain independent.
-  video.addEventListener('play', () => {
-    for (const other of demoPlayers) {
-      if (other !== player && other.querySelector('.video-controls')) other.querySelector('video').pause();
-    }
-    if (window.viewerState?.().playing) document.getElementById('play').click();
-  });
   const toggle = player.querySelector('.video-toggle');
   const seek = player.querySelector('.video-seek');
   const timeline = player.querySelector('.video-timeline');
@@ -86,9 +79,5 @@ for (const player of demoPlayers) {
   controls.hidden = false;
   video.controls = false;
   sync();
+  if (!video.paused && !video.ended) advanceProgress();
 }
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) for (const player of demoPlayers) {
-    if (player.querySelector('.video-controls')) player.querySelector('video').pause();
-  }
-});
