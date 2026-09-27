@@ -170,7 +170,7 @@ function select(id, animate = true) {
     const direction = new THREE.Vector3().fromArray(config.camera.eye).sub(new THREE.Vector3().fromArray(config.camera.target)).normalize();
     moveCamera(target.clone().addScaledVector(direction, 3.8), target, animate);
     $('action-caption').textContent = actor.description;
-    $('selection-note').textContent = 'Individual playback';
+    $('selection-note').textContent = actor.title;
   }
   setTime(state.time);
 }
@@ -234,6 +234,9 @@ async function init() {
   await spark.update({ scene, camera });
   for (const track of config.tracks) document.querySelector(`[data-track="${track.id}"]`).style.setProperty('--track-color', track.color);
   $('actions').addEventListener('click', event => { const button = event.target.closest('[data-track]'); if (button) select(button.dataset.track, event.detail !== 0); });
+  $('actions').addEventListener('interactionselect', event => {
+    if (event.detail.id !== state.selected && (event.detail.id === 'all' || actors.has(event.detail.id))) select(event.detail.id, true);
+  });
   document.querySelectorAll('button[disabled], input[disabled]').forEach(el => el.disabled = false);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); error('Your browser paused the 3D renderer. Reload to continue.'); });
   state.ready = true; progress();

@@ -6,7 +6,9 @@ indicator.className = 'selection-indicator';
 indicator.setAttribute('aria-hidden', 'true');
 actions.append(indicator);
 let selectionAnimation, positioned = false, pointerSelection = false;
+let gesture = null, suppressClickUntil = 0;
 function positionSelection(animate = false) {
+  if (gesture?.dragging) return;
   const button = actions.querySelector('.active');
   if (!button) return;
   const previous = indicator.getBoundingClientRect();
@@ -24,11 +26,69 @@ function positionSelection(animate = false) {
   }
   positioned = true;
 }
-actions.addEventListener('click', event => { pointerSelection = event.detail > 0; }, true);
+actions.addEventListener('click', event => {
+  if (event.detail > 0 && performance.now() < suppressClickUntil) { event.preventDefault(); event.stopImmediatePropagation(); return; }
+  pointerSelection = event.detail > 0;
+}, true);
 new MutationObserver(() => positionSelection(pointerSelection)).observe(actions, { subtree: true, attributes: true, attributeFilter: ['aria-pressed'] });
 new ResizeObserver(() => positionSelection(false)).observe(actions);
 document.fonts.ready.then(() => positionSelection(false));
 positionSelection(false);
+
+const actionButtons = [...actions.querySelectorAll('[data-track]')];
+function chooseDuringDrag(button) {
+  pointerSelection = true;
+  actions.dispatchEvent(new CustomEvent('interactionselect', { detail: { id: button.dataset.track } }));
+}
+actions.addEventListener('pointerdown', event => {
+  const button = event.target.closest('[data-track]');
+  if (!button || button.disabled || event.button !== 0) return;
+  const rect = actions.getBoundingClientRect();
+  const active = actions.querySelector('.active');
+  gesture = { pointerId: event.pointerId, startX: event.clientX, dragging: false, startId: active.dataset.track,
+    offset: button === active ? event.clientX - (rect.x + active.offsetLeft + active.offsetWidth / 2) : 0 };
+});
+actions.addEventListener('pointermove', event => {
+  if (!gesture || event.pointerId !== gesture.pointerId) return;
+  if (!gesture.dragging && Math.abs(event.clientX - gesture.startX) < 4) return;
+  if (!gesture.dragging) {
+    gesture.dragging = true; selectionAnimation?.cancel();
+    actions.setPointerCapture(event.pointerId); actions.classList.add('is-scrubbing');
+    actionButtons.forEach(button => button.classList.remove('is-pressed'));
+  }
+  const rect = actions.getBoundingClientRect();
+  const centers = actionButtons.map(button => button.offsetLeft + button.offsetWidth / 2);
+  const x = Math.max(centers[0], Math.min(centers.at(-1), event.clientX - rect.x - gesture.offset));
+  const nearest = centers.reduce((best, center, i) => Math.abs(center - x) < Math.abs(centers[best] - x) ? i : best, 0);
+  const button = actionButtons[nearest];
+  indicator.style.left = `${x - button.offsetWidth / 2}px`;
+  indicator.style.top = `${button.offsetTop}px`;
+  indicator.style.width = `${button.offsetWidth}px`;
+  indicator.style.height = `${button.offsetHeight}px`;
+  chooseDuringDrag(button);
+});
+function finishActionDrag(event, cancel = false) {
+  if (!gesture || (event.pointerId !== undefined && gesture.pointerId !== event.pointerId)) return;
+  const finished = gesture; gesture = null;
+  if (actions.hasPointerCapture(finished.pointerId)) actions.releasePointerCapture(finished.pointerId);
+  actions.classList.remove('is-scrubbing');
+  if (finished.dragging) {
+    suppressClickUntil = performance.now() + 350;
+    if (cancel) chooseDuringDrag(actionButtons.find(button => button.dataset.track === finished.startId));
+    positionSelection(true);
+  }
+}
+window.addEventListener('pointerup', event => finishActionDrag(event));
+window.addEventListener('pointercancel', event => finishActionDrag(event, true));
+window.addEventListener('blur', event => finishActionDrag(event, true));
+actions.addEventListener('keydown', event => {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  const current = actionButtons.indexOf(document.activeElement);
+  if (current < 0) return;
+  event.preventDefault();
+  const index = event.key === 'Home' ? 0 : event.key === 'End' ? actionButtons.length - 1 : Math.max(0, Math.min(actionButtons.length - 1, current + (event.key === 'ArrowRight' ? 1 : -1)));
+  actionButtons[index].focus(); actionButtons[index].click();
+});
 
 // Hold the pressed state briefly so even a very quick tap has visible feedback.
 const releases = new WeakMap();

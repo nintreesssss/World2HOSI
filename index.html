@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -38,6 +38,7 @@
           <div class="time-label"><span id="current-time">0:00.0</span><span class="time-separator">/</span><span id="duration">0:22.0</span></div>
         </div>
         <div class="timeline-control">
+          <span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span>
           <input id="timeline" type="range" min="0" max="22.0333" step="0.01" value="0" aria-label="Animation time" disabled>
           <span class="timeline-thumb" aria-hidden="true"></span>
         </div>
@@ -49,20 +50,20 @@
       </div>
       <div class="actions-header"><span>Six interactions. One world.</span><span id="selection-note">Explore an action</span></div>
       <div id="actions" class="actions" role="group" aria-label="Select an interaction to explore">
-        <button data-track="all" class="action active" aria-pressed="true" disabled>All actions</button>
-        <button data-track="chair" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#3175b4" aria-hidden="true"></span>Move the chair</button>
-        <button data-track="piano" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#8958b9" aria-hidden="true"></span>Play the piano</button>
-        <button data-track="kitchen" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#d37536" aria-hidden="true"></span>Wash the dishes</button>
-        <button data-track="sofa" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#57994c" aria-hidden="true"></span>Sit on the sofa</button>
-        <button data-track="fruit" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#319ba7" aria-hidden="true"></span>Carry the fruit</button>
-        <button data-track="bowl" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span>Inspect the bowl</button>
+        <button data-track="all" class="action active" aria-label="All actions" data-label="All actions" aria-pressed="true" disabled><span class="dot all-colors" aria-hidden="true"></span></button>
+        <button data-track="chair" class="action" aria-label="Move the chair" data-label="Move the chair" aria-pressed="false" disabled><span class="dot" style="--track-color:#3175b4" aria-hidden="true"></span></button>
+        <button data-track="piano" class="action" aria-label="Play the piano" data-label="Play the piano" aria-pressed="false" disabled><span class="dot" style="--track-color:#8958b9" aria-hidden="true"></span></button>
+        <button data-track="kitchen" class="action" aria-label="Wash the dishes" data-label="Wash the dishes" aria-pressed="false" disabled><span class="dot" style="--track-color:#d37536" aria-hidden="true"></span></button>
+        <button data-track="sofa" class="action" aria-label="Sit on the sofa" data-label="Sit on the sofa" aria-pressed="false" disabled><span class="dot" style="--track-color:#57994c" aria-hidden="true"></span></button>
+        <button data-track="fruit" class="action" aria-label="Carry the fruit" data-label="Carry the fruit" aria-pressed="false" disabled><span class="dot" style="--track-color:#319ba7" aria-hidden="true"></span></button>
+        <button data-track="bowl" class="action" aria-label="Inspect the bowl" data-label="Inspect the bowl" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span></button>
       </div>
       <p id="action-caption" class="caption">Navigate, interact, and continue — all within a reconstructed 3D world.</p>
-      <p class="control-note">Choose an action to explore and control it individually, or play all six together.</p>
+      <p class="control-note">Click or drag to focus. The multicolor dot plays all six.</p>
       <noscript><p class="noscript">Enable JavaScript to explore the interactive 3D scene. The teaser overview is shown above.</p></noscript>
     </section>
   </main>
-  <script type="module" src="ui.js?v=5"></script>
-  <script type="module" src="viewer.js?v=5"></script>
+  <script type="module" src="ui.js?v=6"></script>
+  <script type="module" src="viewer.js?v=6"></script>
 </body>
 </html>
