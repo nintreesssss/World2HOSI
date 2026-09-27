@@ -278,3 +278,32 @@ document.querySelectorAll('.view-tools').forEach(host => {
     surface.style.removeProperty('--glass-x'); surface.style.removeProperty('--glass-y');
   });
 });
+
+// Native dialog keeps keyboard focus inside the enlarged figure and restores it on close.
+const pipelineDialog = document.querySelector('.pipeline-dialog');
+const pipelineScroll = document.querySelector('.pipeline-scroll');
+const pipelineZoom = document.getElementById('pipeline-zoom');
+document.querySelector('.pipeline-open').addEventListener('click', event => {
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  pipelineScroll.classList.remove('is-zoomed');
+  pipelineZoom.setAttribute('aria-pressed', 'false');
+  pipelineZoom.textContent = 'Zoom in';
+  pipelineDialog.showModal();
+  pipelineScroll.scrollTo(0, 0);
+  if (!reducedMotion.matches) pipelineDialog.animate(
+    [{ opacity: 0, transform: 'translateY(10px) scale(.98)' }, { opacity: 1, transform: 'none' }],
+    { duration: 220, easing: 'cubic-bezier(.22,1,.36,1)' }
+  );
+});
+document.getElementById('pipeline-close').addEventListener('click', () => pipelineDialog.close());
+pipelineDialog.addEventListener('click', event => {
+  const r = pipelineDialog.getBoundingClientRect();
+  if (event.target === pipelineDialog && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)) pipelineDialog.close();
+});
+pipelineZoom.addEventListener('click', () => {
+  const zoomed = pipelineScroll.classList.toggle('is-zoomed');
+  pipelineZoom.setAttribute('aria-pressed', String(zoomed));
+  pipelineZoom.textContent = zoomed ? 'Fit to view' : 'Zoom in';
+  if (!zoomed) pipelineScroll.scrollTo(0, 0);
+});

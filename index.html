@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -75,8 +75,21 @@
         <p>To reduce physical artifacts, bounded residual optimization and contact-driven physics simulation further ensure the physical plausibility of human motion and object manipulation, respectively, while preserving interaction intent. Experiments and a perceptual user study show that World2HOSI achieves the best task completion and interaction quality on the evaluated HOSI tasks, while generating more diverse data.</p>
       </div>
     </section>
+    <section class="method-overview" aria-labelledby="method-title">
+      <div class="method-heading"><h2 id="method-title">Framework overview</h2><span>From scenes and instructions to continuous interaction.</span></div>
+      <figure class="pipeline-figure">
+        <a class="pipeline-open" href="assets/pipeline.webp" target="_blank" rel="noopener" aria-label="Enlarge the World2HOSI framework diagram">
+          <img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" decoding="async" alt="World2HOSI pipeline: scene standardization builds an Interactive Scene Package; the task planner compiles actions; navigation, HOI and HSI experts generate unified motion; residual correction and physical simulation refine execution. World updates feed back into planning.">
+          <span class="pipeline-enlarge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>Explore diagram</span>
+        </a>
+      </figure>
+    </section>
   </main>
-  <script type="module" src="ui.js?v=9"></script>
+  <dialog class="pipeline-dialog" aria-labelledby="pipeline-dialog-title">
+    <div class="pipeline-toolbar"><h2 id="pipeline-dialog-title">Framework overview</h2><div><button id="pipeline-zoom" aria-pressed="false">Zoom in</button><button id="pipeline-close" aria-label="Close diagram" autofocus><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div></div>
+    <div class="pipeline-scroll" tabindex="0" aria-label="Framework diagram, scroll to explore when zoomed"><img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" alt="Enlarged World2HOSI framework diagram. Scene standardization, task planning, multi-expert generation and physical simulation are connected through persistent world updates."></div>
+  </dialog>
+  <script type="module" src="ui.js?v=10"></script>
   <script type="module" src="viewer.js?v=14"></script>
 </body>
 </html>

@@ -16,6 +16,44 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .project-name { display: block; font-size: clamp(3rem, 5.2vw, 4.5rem); line-height: 1.07; letter-spacing: -.055em; font-weight: 650; margin-bottom: 20px; }
 .paper-title { display: block; font-size: clamp(1.4rem, 2.1vw, 1.8rem); line-height: 1.42; letter-spacing: -.026em; font-weight: 450; color: var(--secondary); text-wrap: balance; }
 .teaser { width: 100%; }
+.method-overview { margin: 88px auto 16px; }
+.method-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin: 0 8px 28px; }
+.method-heading h2 { margin: 0; font-size: 2rem; line-height: 1.2; font-weight: 600; letter-spacing: -.045em; }
+.method-heading > span { color: var(--secondary); font-size: .9375rem; }
+.pipeline-figure { margin: 0; padding: 22px 20px 60px; border-radius: 28px; background: #fff; border: 1px solid #eceef2; box-shadow: 0 16px 48px -30px #33466624; }
+.pipeline-open { position: relative; display: block; color: #394352; border-radius: 12px; cursor: zoom-in; text-decoration: none; }
+.pipeline-open img { display: block; width: 100%; height: auto; }
+.pipeline-open:focus-visible { outline: 3px solid #0071e3a0; outline-offset: 8px; }
+.pipeline-enlarge { position: absolute; right: 0; bottom: -43px; display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: .75rem; border-radius: 20px; background: #f5f7fabd; border: 1px solid #fff; box-shadow: var(--float-shadow); transition: transform 200ms var(--ease-out), background 200ms ease; }
+.pipeline-enlarge svg { width: 14px; height: 14px; }
+.pipeline-open:hover .pipeline-enlarge { transform: translateY(-2px); background: #edf3f9; }
+.pipeline-open:active .pipeline-enlarge { transform: scale(.96); }
+.pipeline-dialog { width: min(1600px, calc(100vw - 48px)); max-width: none; max-height: calc(100dvh - 48px); padding: 0; border: 1px solid #fff; border-radius: 24px; background: #f9fafc; color: var(--ink); box-shadow: 0 24px 100px #11182740; }
+.pipeline-dialog::backdrop { background: #202b3c66; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.pipeline-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; }
+.pipeline-toolbar h2 { margin: 0; font-size: 1rem; font-weight: 550; letter-spacing: -.02em; }
+.pipeline-toolbar > div { display: flex; gap: 8px; }
+.pipeline-toolbar button { display: grid; place-items: center; height: 36px; padding: 0 14px; border: 1px solid #fff; border-radius: 20px; background: #ffffffa6; box-shadow: var(--float-shadow); font-size: .8125rem; }
+#pipeline-close { width: 36px; padding: 0; }
+.pipeline-scroll { max-height: calc(100dvh - 120px); overflow: auto; overscroll-behavior: contain; background: #fff; padding: 20px; }
+.pipeline-scroll img { display: block; width: 100%; height: auto; }
+.pipeline-scroll.is-zoomed img { width: 2400px; max-width: none; }
+@media (max-width: 700px) {
+  .method-overview { margin-top: 56px; }
+  .method-heading { display: block; margin: 0 4px 20px; }
+  .method-heading h2 { font-size: 1.75rem; margin-bottom: 10px; }
+  .method-heading > span { font-size: .875rem; }
+  .pipeline-figure { padding: 12px 8px 56px; border-radius: 20px; }
+  .pipeline-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 24px); border-radius: 20px; }
+  .pipeline-toolbar { padding: 12px; gap: 8px; }
+  .pipeline-toolbar h2 { font-size: .875rem; }
+  .pipeline-toolbar button { font-size: .75rem; padding: 0 10px; }
+  .pipeline-scroll { padding: 12px; max-height: calc(100dvh - 92px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-enlarge { transition: none; }
+  .pipeline-open:hover .pipeline-enlarge, .pipeline-open:active .pipeline-enlarge { transform: none; }
+}
 .abstract { position: relative; isolation: isolate; display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 48px; max-width: 1112px; margin: 80px auto 16px; padding: 52px 56px; border: 1px solid #eef0f4; border-radius: 32px; background: linear-gradient(130deg, #f8fafdfa, #fffffff2 55%, #faf8fcf5); box-shadow: inset 0 1px 0 #fff, 0 16px 48px -30px #33466624; }
 .abstract::before { content: ''; position: absolute; z-index: -1; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(ellipse at 0 0, #3175b410, transparent 42%), radial-gradient(ellipse at 100% 100%, #bb42850a, transparent 40%); }
 .abstract-heading h2 { margin: 0; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.15; }
