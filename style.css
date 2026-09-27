@@ -25,8 +25,8 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .view-tools { display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 25px; pointer-events: auto; background: var(--glass); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); box-shadow: var(--float-shadow); }
 button, select, input { font: inherit; -webkit-tap-highlight-color: transparent; }
 button, select { color: inherit; }
-button { cursor: pointer; touch-action: manipulation; transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease; user-select: none; -webkit-user-select: none; }
-button:active:not(:disabled) { transform: scale(.96); transition-duration: 80ms; }
+button { cursor: pointer; touch-action: manipulation; transition: transform 240ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease, background-color 160ms ease, color 160ms ease; user-select: none; -webkit-user-select: none; }
+button:active:not(:disabled) { transform: scale(.93); transition-duration: 80ms; }
 button:disabled { cursor: wait; opacity: .42; }
 button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid #0071e3a0; outline-offset: 4px; }
 svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
@@ -57,9 +57,16 @@ select { font-size: .75rem; font-weight: 500; letter-spacing: .02em; border: 0; 
 .actions-header { display: flex; justify-content: space-between; align-items: baseline; margin: 29px 5px 15px; gap: 20px; }
 .actions-header > span:first-child { font-size: 1.1rem; font-weight: 550; letter-spacing: -.025em; }
 #selection-note { font-size: .75rem; color: var(--secondary); }
-.actions { display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 28px; background: #f5f5f7; }
+.actions { position: relative; isolation: isolate; display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: 28px; background: #f5f5f7; }
 .action { display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 22px; background: transparent; padding: 11px 14px; font-size: .75rem; font-weight: 500; line-height: 1.5; letter-spacing: -.01em; color: #6e6e73; white-space: nowrap; flex: 1; min-height: 42px; }
-.action.active { background: #fff; color: var(--ink); box-shadow: 0 2px 7px #0000000a, 0 1px 2px #00000006; }
+.action.active { color: var(--ink); }
+.action { position: relative; z-index: 1; }
+.selection-indicator { position: absolute; z-index: 0; pointer-events: none; border-radius: 22px; background: #fff; box-shadow: 0 3px 10px #00000012, 0 1px 3px #00000008; transform-origin: top left; }
+.action .dot { transition: transform 220ms var(--ease-out), box-shadow 200ms ease; }
+.view-tools svg, .icon-button svg { transition: transform 220ms var(--ease-out); }
+select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, background-color 160ms ease; }
+.scrub-time { position: absolute; pointer-events: none; padding: 4px 9px; border-radius: 9px; background: #1d1d1f; color: white; font-size: .6875rem; font-variant-numeric: tabular-nums; opacity: 0; transform: translate(-50%, 5px) scale(.94); transition: opacity 150ms ease, transform 180ms var(--ease-out); box-shadow: 0 3px 10px #00000018; }
+.scrub-time.visible { opacity: 1; transform: translate(-50%, 0) scale(1); }
 .action .dot { height: 7px; width: 7px; flex-shrink: 0; border-radius: 50%; background: var(--track-color); }
 .caption { text-align: center; font-size: 1rem; letter-spacing: -.015em; line-height: 1.6; min-height: 1.6em; margin: 25px auto 5px; color: #515156; }
 .control-note { text-align: center; font-size: .75rem; color: #85858b; margin: 7px 0 0; }
@@ -78,11 +85,17 @@ progress::-webkit-progress-value { background: #77777c; }
 .viewer-shell:fullscreen { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; }
 .noscript { text-align: center; font-size: .8125rem; }
 @media (hover: hover) and (pointer: fine) {
-  .view-tools button:hover, .icon-button:hover, select:hover { background: #00000006; color: var(--ink); }
-  .play-button:hover { background: #37373c; }
-  .action:not(.active):hover { background: #ececef; color: var(--ink); }
-  #timeline:hover::-webkit-slider-thumb { transform: scale(1.12); }
+  .view-tools button:hover, .icon-button:hover, select:hover { background: #0000000c; color: var(--ink); transform: translateY(-2px); box-shadow: 0 4px 9px #0000000d; }
+  .view-tools button:hover svg, .icon-button:hover svg { transform: scale(1.12); }
+  .play-button:hover { background: #37373c; transform: translateY(-2px) scale(1.07); box-shadow: 0 5px 14px #00000026; }
+  .action:hover { transform: translateY(-2px); color: var(--ink); }
+  .action:not(.active):hover { background: #e8e8ec; box-shadow: 0 3px 7px #00000009; }
+  .action:hover .dot { transform: scale(1.3); box-shadow: 0 0 0 3px #00000006; }
+  #timeline:hover::-webkit-slider-thumb { transform: scale(1.3); }
 }
+button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-pressed { transform: translateY(1px) scale(.93); box-shadow: inset 0 1px 4px #00000013; transition-duration: 80ms; }
+.play-button.is-pressed:not(:disabled), .play-button:active:not(:disabled) { transform: scale(.88); }
+#timeline:active::-webkit-slider-thumb { transform: scale(1.5); }
 @media (max-width: 1020px) {
   .actions { flex-wrap: wrap; justify-content: center; border-radius: 22px; }
   .action { flex: 0 1 auto; padding: 10px 16px; }
@@ -119,8 +132,9 @@ progress::-webkit-progress-value { background: #77777c; }
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner { animation: none; }
-  button, #timeline::-webkit-slider-thumb { transition: none; }
-  button:active:not(:disabled) { transform: none; background-color: #dedee4; }
+  button, select, .action .dot, .view-tools svg, .icon-button svg, .scrub-time, #timeline::-webkit-slider-thumb { transition: none; }
+  button:hover, button:active:not(:disabled), button.is-pressed:not(:disabled), select:hover, select.is-pressed, .action:hover .dot, .view-tools button:hover svg, .icon-button:hover svg { transform: none; }
+  button:active:not(:disabled), button.is-pressed:not(:disabled) { background-color: #dedee4; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .playback, .view-tools, .loading-card { background: #f7f7f9; backdrop-filter: none; -webkit-backdrop-filter: none; }
