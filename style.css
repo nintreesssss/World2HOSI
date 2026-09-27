@@ -58,12 +58,16 @@ svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width:
 .timeline-control.is-dragging .timeline-thumb::before { opacity: 0; }
 .play-options { display: flex; align-items: center; gap: 6px; }
 .reset-rotor { transform-box: view-box; transform-origin: 12px 12px; }
-#loop { position: relative; color: #747d89; background: #68778a0b; box-shadow: inset 0 0 0 1px #66758b18; }
-#loop[aria-pressed="true"] { color: #0867d1; background: #d5e8ff; box-shadow: inset 0 0 0 1px #63a2eb61, 0 1px 4px #1675d518; }
-#loop::after { content: ''; position: absolute; bottom: 4px; left: calc(50% - 1.5px); width: 3px; height: 3px; border-radius: 50%; background: #0867d1; opacity: 0; transform: scale(.5); transition: opacity 180ms ease, transform 220ms var(--ease-out); }
+#loop { position: relative; isolation: isolate; color: #747d89; background: transparent; box-shadow: inset 0 1px 1px #ffffffd9, inset 0 -1px 2px #74839930, 0 2px 5px #24354e12; }
+#loop svg { position: relative; z-index: 1; }
+#loop::before { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; border: 1px solid #ffffffc2; background: linear-gradient(145deg, #ffffffb3, #e8eff740 65%, #ffffff26); opacity: .5; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839926; transition: opacity 240ms ease; }
+#loop[aria-pressed="true"] { color: #2c6bab; background: transparent; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 3px 8px #24354e26; }
+#loop[aria-pressed="true"]::before { opacity: 1; }
+#loop::after { content: ''; position: absolute; z-index: 2; bottom: 4px; left: calc(50% - 1.5px); width: 3px; height: 3px; border-radius: 50%; background: #2c6bab; box-shadow: 0 0 3px #659bd34d; opacity: 0; transform: scale(.5); transition: opacity 180ms ease, transform 220ms var(--ease-out); }
 #loop[aria-pressed="true"]::after { opacity: 1; transform: scale(1); }
 .loop-off-line { stroke-dasharray: 23; stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 200ms var(--ease-out), opacity 150ms ease; }
 #loop[aria-pressed="true"] .loop-off-line { stroke-dashoffset: 23; opacity: 0; }
+#loop.is-pressed::before, #loop:active::before { opacity: 0; }
 .speed-control { position: relative; }
 #speed-toggle { display: flex; align-items: center; justify-content: center; gap: 3px; height: 36px; min-width: 53px; padding: 0 6px; border: 0; border-radius: 18px; background: transparent; color: #394352; font-size: .75rem; font-weight: 550; }
 #speed-toggle[hidden] { display: none; }
@@ -158,6 +162,8 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
 .actions.is-scrubbing .selection-indicator { box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 3px 8px #24354e29; }
 .action.active { color: #171d28; font-weight: 600; }
 @media (hover: hover) and (pointer: fine) {
+  #loop:hover::before { opacity: 0; }
+  #loop:hover { box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 4px 10px #24354e26; }
   #speed-toggle:hover { background: #ffffffa6; transform: translateY(-1px); box-shadow: 0 3px 8px #26374e14; }
   .speed-menu button:hover { background: #dce7f4; }
   .view-tools button:hover, .icon-button:hover, select:hover { background: #0000000c; color: var(--ink); transform: translateY(-2px); box-shadow: 0 4px 9px #0000000d; }
@@ -210,13 +216,14 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   .control-note { font-size: .6875rem; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .speed-menu, #speed-toggle svg, .loop-off-line, #loop::after { transition: none; }
+  .speed-menu, #speed-toggle svg, .loop-off-line, #loop::before, #loop::after { transition: none; }
   .spinner { animation: none; }
   button, select, .action .dot, .action::after, .view-tools svg, .icon-button svg, .scrub-time, .timeline-thumb, .timeline-thumb::before, .play-button::before, .play-button::after, .selection-indicator, .selection-indicator::after { transition: none; }
   button:hover, button:active:not(:disabled), button.is-pressed:not(:disabled), select:hover, select.is-pressed, .action:hover .dot, .view-tools button:hover svg, .icon-button:hover svg { transform: none; }
   button:active:not(:disabled), button.is-pressed:not(:disabled) { background-color: #dedee4; }
 }
 @media (prefers-reduced-transparency: reduce) {
+  #loop { background: #f4f6f9; }
   .speed-menu { background: #f5f8fc; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .playback, .view-tools, .loading-card, .selection-indicator { background: #f7f7f9; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .playback::after, .view-tools::after, .selection-indicator::after { display: none; }
@@ -225,6 +232,8 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   #play { color: #344052; }
 }
 @media (prefers-contrast: more) {
+  #loop { background: #fff; outline: 1px solid #727277; }
+  #loop[aria-pressed="true"] { color: #0754a1; outline: 2px solid #0754a1; }
   .speed-menu { background: #fff; border-color: #727277; backdrop-filter: none; -webkit-backdrop-filter: none; }
   :root { --secondary: #414145; }
   .playback, .view-tools, .actions, .selection-indicator { box-shadow: inset 0 0 0 1px #727277; background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
