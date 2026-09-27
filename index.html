@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -64,6 +64,17 @@
         <button data-track="bowl" class="action" aria-label="Inspect the bowl" data-label="Inspect the bowl" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span></button>
       </div>
       <p id="action-caption" class="caption" aria-live="polite" hidden></p>
+    </section>
+    <section class="abstract" aria-labelledby="abstract-title">
+      <div class="abstract-heading">
+        <div class="abstract-spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <h2 id="abstract-title">Abstract</h2>
+      </div>
+      <div class="abstract-copy">
+        <p>Long-horizon human–object–scene interaction (HOSI) is central to embodied AI, animation, and game development. Existing human-object interaction (HOI) and human–scene interaction (HSI) models excel in their respective domains, but none alone covers tasks requiring multiple interaction skills. Training unified HOSI models is hindered by scarce and costly data.</p>
+        <p>We introduce <strong>World2HOSI</strong>, a multi-expert orchestration harness that generates continuous HOSI data from 3D Gaussian Splatting (3DGS) scenes and natural language instructions. Our key insight is that long-horizon HOSI hinges not on a stronger single model but on orchestration. Given a shared, structured scene state and an orchestration harness grounded in it, existing experts can jointly accomplish tasks beyond the reach of any of them alone. World2HOSI realizes this insight as a closed loop around a <strong>persistent scene state</strong> built from decoupled background and object assets. A harness plans action stages over this state, invokes experts via their native conditioning interfaces, and writes each action’s effects back, so that every invocation is grounded in the evolving world.</p>
+        <p>To reduce physical artifacts, bounded residual optimization and contact-driven physics simulation further ensure the physical plausibility of human motion and object manipulation, respectively, while preserving interaction intent. Experiments and a perceptual user study show that World2HOSI achieves the best task completion and interaction quality on the evaluated HOSI tasks, while generating more diverse data.</p>
+      </div>
     </section>
   </main>
   <script type="module" src="ui.js?v=9"></script>
