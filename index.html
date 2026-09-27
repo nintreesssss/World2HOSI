@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -16,20 +16,17 @@
     <header class="paper-heading">
       <h1><span class="project-name">World2HOSI</span><span class="paper-title">A Multi-Expert Harness for Long-Horizon<br class="desktop-break"> Human-Object-Scene Interaction Generation</span></h1>
     </header>
-    <section class="teaser" aria-label="Interactive 3D teaser">
+    <section class="teaser is-loading" id="teaser" aria-label="Interactive 3D teaser" aria-busy="true">
       <div class="viewer-shell" id="viewer-shell">
         <div id="viewport" role="img" aria-label="Interactive reconstructed home with six animated human-object interactions"></div>
         <div class="viewer-topbar">
-          <span class="live-badge"><span></span> Interactive scene</span>
           <div class="view-tools">
             <button id="reset-camera" title="Reset the camera" aria-label="Reset camera" disabled><svg viewBox="0 0 24 24"><path d="M4 9a8 8 0 1 1 0 6M4 4v5h5"/></svg><span>Reset view</span></button>
             <button id="fullscreen" title="Enter fullscreen" aria-label="Enter fullscreen"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
           </div>
         </div>
-        <div class="loading" id="loading" role="status" aria-live="polite">
-          <img src="assets/teaser-poster.webp" alt="Overview of the six teaser interactions" width="1600" height="1200">
-          <div class="loading-card"><span class="spinner" aria-hidden="true"></span><strong id="loading-text">Loading the 3D scene</strong><span id="loading-detail">Preparing the home and its six interactions…</span><progress id="load-progress" max="100" value="0"></progress><button id="retry" hidden>Try again</button></div>
-        </div>
+        <div class="loading" id="loading"><progress id="load-progress" max="100" value="0" aria-label="Loading 3D scene"></progress></div>
+        <span id="load-status" class="sr-only" role="status" aria-live="polite">Loading 3D scene</span>
         <div class="viewer-hint" id="viewer-hint">Drag to explore <span>·</span> Scroll to zoom</div>
       <div class="playback" aria-label="Animation playback controls">
         <div class="transport">
@@ -48,7 +45,6 @@
         </div>
       </div>
       </div>
-      <div class="actions-header"><span>Six interactions. One world.</span><span id="selection-note">Explore an action</span></div>
       <div id="actions" class="actions" role="group" aria-label="Select an interaction to explore">
         <button data-track="all" class="action active" aria-label="All actions" data-label="All actions" aria-pressed="true" disabled><span class="dot all-colors" aria-hidden="true"></span></button>
         <button data-track="chair" class="action" aria-label="Move the chair" data-label="Move the chair" aria-pressed="false" disabled><span class="dot" style="--track-color:#3175b4" aria-hidden="true"></span></button>
@@ -58,12 +54,10 @@
         <button data-track="fruit" class="action" aria-label="Carry the fruit" data-label="Carry the fruit" aria-pressed="false" disabled><span class="dot" style="--track-color:#319ba7" aria-hidden="true"></span></button>
         <button data-track="bowl" class="action" aria-label="Inspect the bowl" data-label="Inspect the bowl" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span></button>
       </div>
-      <p id="action-caption" class="caption">Navigate, interact, and continue — all within a reconstructed 3D world.</p>
-      <p class="control-note">Click or drag to focus. The multicolor dot plays all six.</p>
-      <noscript><p class="noscript">Enable JavaScript to explore the interactive 3D scene. The teaser overview is shown above.</p></noscript>
+      <p id="action-caption" class="caption" aria-live="polite" hidden></p>
     </section>
   </main>
   <script type="module" src="ui.js?v=7"></script>
-  <script type="module" src="viewer.js?v=6"></script>
+  <script type="module" src="viewer.js?v=8"></script>
 </body>
 </html>

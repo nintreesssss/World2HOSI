@@ -1,17 +1,36 @@
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { SparkRenderer, SplatMesh } from '@sparkjsdev/spark';
+import { arrivalModifier, arrivalProgress } from './arrival.js?v=8';
 
 const $ = id => document.getElementById(id);
 const viewport = $('viewport');
 const state = { ready: false, playing: false, selected: 'all', time: 0, speed: 1, loop: true, dragging: false };
 const actors = new Map(), props = [];
+const arrivalMeshes = [];
+let arrivalActive = false, arrivalTime = 0, loadFraction = 0, loadedParts = 0;
+const arrivalDuration = 2.6;
 let config, renderer, scene, camera, controls, spark, frameId;
 const q0 = new THREE.Quaternion(), q1 = new THREE.Quaternion();
 const followPrevious = new THREE.Vector3();
 const cameraMotion = { active: false, eye: new THREE.Vector3(), target: new THREE.Vector3(), eyeVelocity: new THREE.Vector3(), targetVelocity: new THREE.Vector3() };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const allCaption = 'Navigate, interact, and continue — all within a reconstructed 3D world.';
+function reportLoad() { $('load-progress').value = 5 + loadFraction * 70 + loadedParts * 2; }
+function attachArrival(mesh) {
+  mesh.worldModifier = arrivalModifier(); mesh.updateGenerator(); arrivalMeshes.push(mesh);
+}
+function finishArrival() {
+  arrivalActive = false; arrivalProgress.value = 1;
+  for (const mesh of arrivalMeshes) mesh.updateVersion();
+  for (const actor of actors.values()) {
+    actor.mesh.visible = true;
+    for (const material of actor.mesh.material) { material.opacity = 1; material.transparent = false; material.depthWrite = true; material.needsUpdate = true; }
+  }
+  $('teaser').className = 'teaser is-ready'; $('teaser').setAttribute('aria-busy', 'false');
+  $('load-status').textContent = '3D scene ready';
+  document.querySelectorAll('button[disabled], input[disabled]').forEach(el => el.disabled = false);
+  state.ready = true; progress(); play(!reducedMotion.matches);
+}
 
 function formatTime(t) {
   const minutes = Math.floor(t / 60);
@@ -84,6 +103,8 @@ async function loadActor(track) {
   const base = { color, roughness: .58, metalness: .08 };
   const mesh = new THREE.SkinnedMesh(geometry, [new THREE.MeshStandardMaterial(base), new THREE.MeshStandardMaterial({ ...base, flatShading: true })]);
   mesh.frustumCulled = false;
+  mesh.visible = false;
+  for (const material of mesh.material) { material.transparent = true; material.opacity = 0; material.depthWrite = false; }
   const bones = Array.from({ length: 55 }, () => new THREE.Bone());
   bones.forEach(bone => mesh.add(bone));
   mesh.bind(new THREE.Skeleton(bones, bones.map(() => new THREE.Matrix4())), new THREE.Matrix4());
@@ -91,13 +112,16 @@ async function loadActor(track) {
   const poses = new Float32Array(poseBytes.buffer, poseBytes.byteOffset, poseBytes.byteLength / 4);
   if (poses.length !== track.frames * 55 * 7) throw new Error(`Invalid animation length: ${track.id}`);
   actors.set(track.id, { ...track, mesh, bones, poses, time: 0 });
+  loadedParts++; reportLoad();
 }
 async function loadProp(prop) {
   const [bytes, motionBytes] = await Promise.all([asset(prop.file), asset(prop.motion)]);
   const mesh = new SplatMesh({ fileBytes: bytes, fileName: `${prop.id}.splat`, lod: false });
   await mesh.initialized;
+  attachArrival(mesh);
   scene.add(mesh);
   props.push({ ...prop, mesh, poses: new Float32Array(motionBytes.buffer, motionBytes.byteOffset, motionBytes.byteLength / 4) });
+  loadedParts++; reportLoad();
 }
 function interpolate(target, poses, offsetA, offsetB, alpha) {
   target.position.set(
@@ -160,8 +184,7 @@ function select(id, animate = true) {
   if (id === 'all') {
     state.time = 0;
     home(animate);
-    $('action-caption').textContent = allCaption;
-    $('selection-note').textContent = 'Explore an action';
+    $('action-caption').textContent = ''; $('action-caption').hidden = true;
   } else {
     const actor = actors.get(id);
     state.time = actor.time;
@@ -170,7 +193,7 @@ function select(id, animate = true) {
     const direction = new THREE.Vector3().fromArray(config.camera.eye).sub(new THREE.Vector3().fromArray(config.camera.target)).normalize();
     moveCamera(target.clone().addScaledVector(direction, 3.8), target, animate);
     $('action-caption').textContent = actor.description;
-    $('selection-note').textContent = actor.title;
+    $('action-caption').hidden = false;
   }
   setTime(state.time);
 }
@@ -183,17 +206,17 @@ function resize() {
   camera.updateProjectionMatrix();
 }
 function error(message) {
-  play(false);
-  $('loading').hidden = false;
-  $('loading-text').textContent = 'The 3D scene could not be opened';
-  $('loading-detail').textContent = message;
-  document.querySelector('.spinner').hidden = true;
-  $('load-progress').hidden = true; $('retry').hidden = false;
+  play(false); state.ready = false; arrivalActive = false; cancelAnimationFrame(frameId);
+  $('teaser').className = 'teaser has-error'; $('teaser').setAttribute('aria-busy', 'false');
+  $('loading').hidden = false; $('load-progress').hidden = true;
+  $('load-status').textContent = message;
 }
 async function init() {
   const response = await fetch('./assets/scene.json?v=2');
   if (!response.ok) throw new Error('Scene configuration is unavailable. Please reload the page.');
   config = await response.json();
+  arrivalProgress.value = reducedMotion.matches ? 1 : 0;
+  reportLoad();
   renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.setClearColor(0xffffff, 1);
@@ -219,17 +242,17 @@ async function init() {
   spark = new SparkRenderer({ renderer, maxStdDev: Math.sqrt(8), minSortIntervalMs: 35 });
   scene.add(spark);
   const envPromise = asset(config.environment, fraction => {
-    $('load-progress').value = fraction * 80;
-    $('loading-detail').textContent = `Loading the reconstructed home · ${Math.round(fraction * 100)}%`;
+    loadFraction = fraction; reportLoad();
   }).then(async bytes => {
     const environment = new SplatMesh({ fileBytes: bytes, fileName: 'environment.splat', lod: false });
     await environment.initialized;
+    attachArrival(environment);
     scene.add(environment);
     return environment;
   });
   await Promise.all([envPromise, ...config.tracks.map(loadActor), ...config.objects.map(loadProp)]);
   // Report completion only once all six true motion streams and synchronized props are ready.
-  $('loading-text').textContent = 'Preparing the first view'; $('load-progress').value = 95;
+  $('load-status').textContent = 'Preparing 3D scene'; $('load-progress').value = 95;
   updatePoses();
   await spark.update({ scene, camera });
   for (const track of config.tracks) document.querySelector(`[data-track="${track.id}"]`).style.setProperty('--track-color', track.color);
@@ -237,14 +260,27 @@ async function init() {
   $('actions').addEventListener('interactionselect', event => {
     if (event.detail.id !== state.selected && (event.detail.id === 'all' || actors.has(event.detail.id))) select(event.detail.id, true);
   });
-  document.querySelectorAll('button[disabled], input[disabled]').forEach(el => el.disabled = false);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); error('Your browser paused the 3D renderer. Reload to continue.'); });
-  state.ready = true; progress();
+  progress(); $('load-progress').value = 100;
   renderer.render(scene, camera);
   $('loading').hidden = true;
+  $('teaser').className = 'teaser is-assembling';
+  arrivalActive = !reducedMotion.matches;
+  if (!arrivalActive) finishArrival();
   let previous = performance.now();
   function animate(now) {
     const dt = Math.max(0, Math.min((now - previous) / 1000, .1)); previous = now;
+    if (arrivalActive && !document.hidden) {
+      arrivalTime += dt;
+      arrivalProgress.value = reducedMotion.matches ? 1 : Math.min(1, arrivalTime / arrivalDuration);
+      for (const mesh of arrivalMeshes) mesh.updateVersion();
+      const opacity = THREE.MathUtils.smoothstep(arrivalProgress.value, .74, 1);
+      for (const actor of actors.values()) {
+        actor.mesh.visible = opacity > 0;
+        for (const material of actor.mesh.material) material.opacity = opacity;
+      }
+      if (arrivalProgress.value === 1) finishArrival();
+    }
     if (!document.hidden && state.playing && !state.dragging) {
       let time = state.time + dt * state.speed;
       if (time > duration()) {
@@ -257,9 +293,8 @@ async function init() {
     frameId = requestAnimationFrame(animate);
   }
   frameId = requestAnimationFrame(animate);
-  play(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   // Read-only diagnostics for browser QA: no account details or source paths.
-  window.viewerState = () => ({ ready: state.ready, playing: state.playing, selected: state.selected, time: state.time, duration: duration(), actorCount: actors.size, propCount: props.length, camera: camera.position.toArray(), actors: [...actors.values()].map(a => ({ id:a.id,time:a.time,root:a.bones[0].position.toArray() })) });
+  window.viewerState = () => ({ ready: state.ready, assembling: arrivalActive, arrival: arrivalProgress.value, playing: state.playing, selected: state.selected, time: state.time, duration: duration(), actorCount: actors.size, propCount: props.length, camera: camera.position.toArray(), actors: [...actors.values()].map(a => ({ id:a.id,time:a.time,root:a.bones[0].position.toArray() })) });
 }
 $('play').addEventListener('click', () => { if (state.time >= duration()) setTime(0); play(!state.playing); });
 $('replay').addEventListener('click', () => { setTime(0); play(true); });
@@ -275,7 +310,6 @@ $('fullscreen').addEventListener('click', async () => {
   catch { $('viewer-hint').textContent = 'Fullscreen is not available in this browser. Drag to rotate; scroll to zoom.'; }
 });
 document.addEventListener('fullscreenchange', () => $('fullscreen').setAttribute('aria-label', document.fullscreenElement ? 'Exit fullscreen' : 'Enter fullscreen'));
-$('retry').addEventListener('click', () => window.location.reload());
 document.addEventListener('keydown', event => {
   if (!state.ready || /INPUT|SELECT|BUTTON|TEXTAREA/.test(event.target.tagName)) return;
   if (event.code === 'Space') { event.preventDefault(); play(!state.playing); }
