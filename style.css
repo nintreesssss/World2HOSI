@@ -57,6 +57,26 @@ svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width:
 .timeline-control.is-dragging .timeline-thumb { width: 38px; height: 24px; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 3px 8px #24354e29; }
 .timeline-control.is-dragging .timeline-thumb::before { opacity: 0; }
 .play-options { display: flex; align-items: center; gap: 6px; }
+.reset-rotor { transform-box: view-box; transform-origin: 12px 12px; }
+#loop { position: relative; color: #747d89; background: #68778a0b; box-shadow: inset 0 0 0 1px #66758b18; }
+#loop[aria-pressed="true"] { color: #0867d1; background: #d5e8ff; box-shadow: inset 0 0 0 1px #63a2eb61, 0 1px 4px #1675d518; }
+#loop::after { content: ''; position: absolute; bottom: 4px; left: calc(50% - 1.5px); width: 3px; height: 3px; border-radius: 50%; background: #0867d1; opacity: 0; transform: scale(.5); transition: opacity 180ms ease, transform 220ms var(--ease-out); }
+#loop[aria-pressed="true"]::after { opacity: 1; transform: scale(1); }
+.loop-off-line { stroke-dasharray: 23; stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 200ms var(--ease-out), opacity 150ms ease; }
+#loop[aria-pressed="true"] .loop-off-line { stroke-dashoffset: 23; opacity: 0; }
+.speed-control { position: relative; }
+#speed-toggle { display: flex; align-items: center; justify-content: center; gap: 3px; height: 36px; min-width: 53px; padding: 0 6px; border: 0; border-radius: 18px; background: transparent; color: #394352; font-size: .75rem; font-weight: 550; }
+#speed-toggle[hidden] { display: none; }
+#speed-toggle svg { width: 13px; height: 13px; transition: transform 220ms var(--ease-out); }
+#speed-value { display: inline-block; min-width: 22px; font-variant-numeric: tabular-nums; }
+#speed-toggle[aria-expanded="true"] { background: #ffffffb3; box-shadow: inset 0 0 0 1px #fff, 0 2px 7px #26374e17; }
+#speed-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.speed-menu { position: absolute; bottom: calc(100% + 17px); right: -6px; z-index: 10; width: 126px; padding: 5px; border-radius: 18px; background: #f5f8fcef; backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); border: 1px solid #ffffffd9; box-shadow: inset 0 1px 1px #fff, 0 8px 24px #20314d26; transform-origin: calc(100% - 27px) bottom; opacity: 0; transform: translateY(7px) scale(.94); visibility: hidden; transition: opacity 160ms ease, transform 220ms cubic-bezier(.22,1,.36,1), visibility 220ms; }
+.speed-menu.is-open { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
+.speed-menu button { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; font-size: .8125rem; color: #394352; font-variant-numeric: tabular-nums; }
+.speed-menu button span { opacity: 0; color: #0873e1; transition: opacity 150ms ease; }
+.speed-menu button[aria-selected="true"] { background: #deebfa; color: #0967c9; }
+.speed-menu button[aria-selected="true"] span { opacity: 1; }
 .speed-label { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; white-space: nowrap; }
 select { font-size: .75rem; font-weight: 500; letter-spacing: .02em; border: 0; border-radius: 15px; background: transparent; padding: 8px 2px 8px 7px; min-height: 36px; cursor: pointer; }
 .actions-header { display: flex; justify-content: space-between; align-items: baseline; margin: 29px 5px 15px; gap: 20px; }
@@ -138,6 +158,8 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
 .actions.is-scrubbing .selection-indicator { box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 3px 8px #24354e29; }
 .action.active { color: #171d28; font-weight: 600; }
 @media (hover: hover) and (pointer: fine) {
+  #speed-toggle:hover { background: #ffffffa6; transform: translateY(-1px); box-shadow: 0 3px 8px #26374e14; }
+  .speed-menu button:hover { background: #dce7f4; }
   .view-tools button:hover, .icon-button:hover, select:hover { background: #0000000c; color: var(--ink); transform: translateY(-2px); box-shadow: 0 4px 9px #0000000d; }
   .view-tools button:hover svg, .icon-button:hover svg { transform: scale(1.12); }
   .play-button:hover { color: #263345; transform: translateY(-2px) scale(1.07); box-shadow: 0 3px 8px #24354e29; }
@@ -174,6 +196,7 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   .time-label { font-size: .625rem; min-width: 85px; }
   .time-separator { margin: 0 4px; }
   .play-options { margin-left: auto; gap: 1px; }
+  #speed-toggle { min-width: 48px; font-size: .6875rem; }
   select { padding: 8px 0 8px 4px; font-size: .6875rem; }
   .timeline-control { order: 3; flex-basis: 100%; height: 24px; margin: 0 3px; }
   #timeline { height: 24px; }
@@ -187,12 +210,14 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   .control-note { font-size: .6875rem; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .speed-menu, #speed-toggle svg, .loop-off-line, #loop::after { transition: none; }
   .spinner { animation: none; }
   button, select, .action .dot, .action::after, .view-tools svg, .icon-button svg, .scrub-time, .timeline-thumb, .timeline-thumb::before, .play-button::before, .play-button::after, .selection-indicator, .selection-indicator::after { transition: none; }
   button:hover, button:active:not(:disabled), button.is-pressed:not(:disabled), select:hover, select.is-pressed, .action:hover .dot, .view-tools button:hover svg, .icon-button:hover svg { transform: none; }
   button:active:not(:disabled), button.is-pressed:not(:disabled) { background-color: #dedee4; }
 }
 @media (prefers-reduced-transparency: reduce) {
+  .speed-menu { background: #f5f8fc; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .playback, .view-tools, .loading-card, .selection-indicator { background: #f7f7f9; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .playback::after, .view-tools::after, .selection-indicator::after { display: none; }
   .timeline-control .timeline-thumb::before { opacity: 1; }
@@ -200,6 +225,7 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   #play { color: #344052; }
 }
 @media (prefers-contrast: more) {
+  .speed-menu { background: #fff; border-color: #727277; backdrop-filter: none; -webkit-backdrop-filter: none; }
   :root { --secondary: #414145; }
   .playback, .view-tools, .actions, .selection-indicator { box-shadow: inset 0 0 0 1px #727277; background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .action.active { outline: 1px solid #727277; }

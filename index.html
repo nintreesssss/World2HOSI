@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -40,7 +40,16 @@
           <span class="timeline-thumb" aria-hidden="true"></span>
         </div>
         <div class="play-options">
-          <label class="speed-label" for="speed">Speed</label><select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+          <div class="speed-control">
+            <label class="speed-label" for="speed">Speed</label><select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+            <button id="speed-toggle" aria-label="Playback speed, 1×" aria-haspopup="listbox" aria-expanded="false" aria-controls="speed-menu" hidden><span id="speed-value">1×</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+            <div id="speed-menu" class="speed-menu" role="listbox" aria-label="Playback speed" aria-hidden="true" inert>
+              <button role="option" data-speed="0.5" aria-selected="false" tabindex="-1">0.5×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="1" aria-selected="true" tabindex="-1">1×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="1.5" aria-selected="false" tabindex="-1">1.5×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="2" aria-selected="false" tabindex="-1">2×<span aria-hidden="true">✓</span></button>
+            </div>
+          </div>
           <button id="loop" class="icon-button" aria-label="Loop playback" aria-pressed="true" title="Loop playback"><svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V8a2 2 0 0 1 2-2h16M7 22l-4-4 4-4m14-1v3a2 2 0 0 1-2 2H3"/></svg></button>
         </div>
       </div>
@@ -57,7 +66,7 @@
       <p id="action-caption" class="caption" aria-live="polite" hidden></p>
     </section>
   </main>
-  <script type="module" src="ui.js?v=7"></script>
+  <script type="module" src="ui.js?v=9"></script>
   <script type="module" src="viewer.js?v=8"></script>
 </body>
 </html>

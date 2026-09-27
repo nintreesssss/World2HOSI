@@ -109,17 +109,82 @@ document.querySelectorAll('button, select').forEach(control => {
 });
 
 const iconAnimations = new WeakMap();
-document.querySelectorAll('#replay, #reset-camera, #loop, #fullscreen').forEach(button => {
+document.querySelectorAll('#replay, #reset-camera').forEach(button => {
+  const icon = button.querySelector('svg');
+  const rotor = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  rotor.classList.add('reset-rotor');
+  while (icon.firstChild) rotor.append(icon.firstChild);
+  icon.append(rotor);
+  let rotation;
+  button.addEventListener('click', event => {
+    if (!event.detail || reducedMotion.matches) return;
+    const progress = rotation?.animation.effect.getComputedTiming().progress ?? 1;
+    const from = rotation ? rotation.from + (rotation.to - rotation.from) * progress : 0;
+    rotation?.animation.cancel();
+    let to = Math.ceil(from / 360) * 360 - 360;
+    if (from - to < 180) to -= 360;
+    const animation = rotor.animate([{ transform: `rotate(${from}deg)` }, { transform: `rotate(${to}deg)` }], { duration: 420, easing: 'cubic-bezier(.25,.5,.35,1)', fill: 'forwards' });
+    rotation = { from, to, animation };
+    animation.onfinish = () => { if (rotation?.animation === animation) { animation.cancel(); rotation = undefined; } };
+  });
+  reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { rotation?.animation.cancel(); rotation = undefined; } });
+});
+document.querySelectorAll('#loop, #fullscreen').forEach(button => {
   button.addEventListener('click', event => {
     if (!event.detail || reducedMotion.matches) return;
     const icon = button.querySelector('svg');
     iconAnimations.get(icon)?.cancel();
-    const frames = button.id === 'replay' || button.id === 'reset-camera'
-      ? [{ transform: 'rotate(-100deg)' }, { transform: 'rotate(0deg)' }]
-      : [{ transform: 'scale(.65)', opacity: .45 }, { transform: 'scale(1)', opacity: 1 }];
+    const frames = [{ transform: 'scale(.8)', opacity: .6 }, { transform: 'scale(1)', opacity: 1 }];
     iconAnimations.set(icon, icon.animate(frames, { duration: 240, easing: 'cubic-bezier(.22,1,.36,1)' }));
   });
 });
+
+const loopButton = document.getElementById('loop');
+const loopSlash = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+loopSlash.setAttribute('d', 'M4 20L20 4'); loopSlash.classList.add('loop-off-line');
+loopButton.querySelector('svg').append(loopSlash);
+function updateLoopHint() { loopButton.title = `Loop playback: ${loopButton.getAttribute('aria-pressed') === 'true' ? 'On' : 'Off'}`; }
+new MutationObserver(updateLoopHint).observe(loopButton, { attributes: true, attributeFilter: ['aria-pressed'] });
+updateLoopHint();
+
+const speedSelect = document.getElementById('speed');
+const speedToggle = document.getElementById('speed-toggle');
+const speedMenu = document.getElementById('speed-menu');
+const speedOptions = [...speedMenu.querySelectorAll('[data-speed]')];
+speedSelect.hidden = true; speedToggle.hidden = false;
+let speedOpen = false;
+function openSpeed(open, focus = false) {
+  speedOpen = open; speedToggle.setAttribute('aria-expanded', String(open));
+  speedMenu.classList.toggle('is-open', open); speedMenu.setAttribute('aria-hidden', String(!open)); speedMenu.inert = !open;
+  if (open && focus) speedOptions.find(option => option.dataset.speed === speedSelect.value).focus();
+}
+speedToggle.addEventListener('click', event => openSpeed(!speedOpen, event.detail === 0));
+speedToggle.addEventListener('keydown', event => {
+  if (['ArrowUp', 'ArrowDown'].includes(event.key)) { event.preventDefault(); openSpeed(true, true); }
+});
+speedOptions.forEach(option => option.addEventListener('click', event => {
+  speedSelect.value = option.dataset.speed; speedSelect.dispatchEvent(new Event('change', { bubbles: true }));
+  openSpeed(false); speedToggle.focus({ preventScroll: true });
+  if (event.detail && !reducedMotion.matches) document.getElementById('speed-value').animate([{ opacity: .3, transform: 'translateY(3px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 180, easing: 'cubic-bezier(.22,1,.36,1)' });
+}));
+speedSelect.addEventListener('change', () => {
+  document.getElementById('speed-value').textContent = `${speedSelect.value}×`;
+  speedToggle.setAttribute('aria-label', `Playback speed, ${speedSelect.value}×`);
+  speedOptions.forEach(option => option.setAttribute('aria-selected', String(option.dataset.speed === speedSelect.value)));
+});
+speedMenu.addEventListener('keydown', event => {
+  const i = speedOptions.indexOf(document.activeElement);
+  if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+    event.preventDefault();
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? speedOptions.length - 1 : (i + (event.key === 'ArrowDown' ? 1 : -1) + speedOptions.length) % speedOptions.length;
+    speedOptions[next].focus();
+  }
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && speedOpen) { event.preventDefault(); openSpeed(false); speedToggle.focus(); }
+});
+document.addEventListener('pointerdown', event => { if (!event.target.closest('.speed-control')) openSpeed(false); });
+document.addEventListener('focusin', event => { if (!event.target.closest('.speed-control')) openSpeed(false); });
 
 const timeline = document.getElementById('timeline');
 const timelineControl = timeline.parentElement;
