@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "duration": 22.033333333333335,
+  "environment": "environment.splat.gz",
+  "splatCount": 983255,
+  "camera": {
+    "eye": [
+      10.906416699,
+      1.526139744,
+      8.879529188
+    ],
+    "target": [
+      7.3,
+      5.2,
+      0.5
+    ],
+    "horizontalFov": 68
+  },
+  "tracks": [
+    {
+      "id": "chair",
+      "title": "Move the chair",
+      "description": "Walk to the dining table and carry the chair to the living room.",
+      "color": "#3175b4",
+      "linearColor": [
+        0.022,
+        0.12,
+        0.42
+      ],
+      "frames": 662,
+      "fps": 30.000000000000107,
+      "duration": 22.033333333333335,
+      "geometry": "chair-geometry.json.gz",
+      "motion": "chair-motion.bin.gz"
+    },
+    {
+      "id": "piano",
+      "title": "Play the piano",
+      "description": "Walk over, sit down, and play the piano.",
+      "color": "#8958b9",
+      "linearColor": [
+        0.25,
+        0.065,
+        0.42
+      ],
+      "frames": 460,
+      "fps": 30.000000000000107,
+      "duration": 15.3,
+      "geometry": "piano-geometry.json.gz",
+      "motion": "piano-motion.bin.gz"
+    },
+    {
+      "id": "kitchen",
+      "title": "Wash the dishes",
+      "description": "Walk into the kitchen and wash the dishes.",
+      "color": "#d37536",
+      "linearColor": [
+        0.62,
+        0.13,
+        0.025
+      ],
+      "frames": 418,
+      "fps": 30.000000000000107,
+      "duration": 13.9,
+      "geometry": "kitchen-geometry.json.gz",
+      "motion": "kitchen-motion.bin.gz"
+    },
+    {
+      "id": "sofa",
+      "title": "Sit on the sofa",
+      "description": "Approach the sofa, sit down, and watch TV.",
+      "color": "#57994c",
+      "linearColor": [
+        0.09,
+        0.35,
+        0.045
+      ],
+      "frames": 336,
+      "fps": 30.000000000000107,
+      "duration": 11.166666666666666,
+      "geometry": "sofa-geometry.json.gz",
+      "motion": "sofa-motion.bin.gz"
+    },
+    {
+      "id": "fruit",
+      "title": "Carry the fruit",
+      "description": "Pick up the fruit platter and carry it upstairs.",
+      "color": "#319ba7",
+      "linearColor": [
+        0.015,
+        0.29,
+        0.34
+      ],
+      "frames": 490,
+      "fps": 30.000000000000107,
+      "duration": 16.3,
+      "geometry": "fruit-geometry.json.gz",
+      "motion": "fruit-motion.bin.gz"
+    },
+    {
+      "id": "bowl",
+      "title": "Inspect the bowl",
+      "description": "Pick up the bowl and take a closer look.",
+      "color": "#bb4285",
+      "linearColor": [
+        0.46,
+        0.045,
+        0.2
+      ],
+      "frames": 360,
+      "fps": 30.000000000000107,
+      "duration": 11.966666666666667,
+      "geometry": "bowl-geometry.json.gz",
+      "motion": "bowl-motion.bin.gz"
+    }
+  ],
+  "objects": [
+    {
+      "id": "163",
+      "track": "bowl",
+      "frames": 360,
+      "file": "163.splat.gz",
+      "motion": "163-motion.bin.gz"
+    },
+    {
+      "id": "207",
+      "track": "fruit",
+      "frames": 490,
+      "file": "207.splat.gz",
+      "motion": "207-motion.bin.gz"
+    },
+    {
+      "id": "209",
+      "track": "fruit",
+      "frames": 490,
+      "file": "209.splat.gz",
+      "motion": "209-motion.bin.gz"
+    },
+    {
+      "id": "72",
+      "track": "chair",
+      "frames": 662,
+      "file": "72.splat.gz",
+      "motion": "72-motion.bin.gz"
+    }
+  ]
+}
