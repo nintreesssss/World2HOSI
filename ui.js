@@ -76,3 +76,39 @@ timeline.addEventListener('pointerleave', () => timeTip.classList.remove('visibl
 timeline.addEventListener('input', updateTimeTip);
 timeline.addEventListener('pointerdown', () => { updateTimeTip(); timeTip.classList.add('visible'); });
 window.addEventListener('pointerup', () => { if (!timeline.matches(':hover')) timeTip.classList.remove('visible'); });
+
+// Pointer-driven specular light, critically damped and idle when settled.
+// This decorates the material only: slider values remain one-to-one with input.
+document.querySelectorAll('.playback, .view-tools, .actions').forEach(host => {
+  const surface = host === actions ? indicator : host;
+  let x = .5, y = .15, tx = .5, ty = .15, vx = 0, vy = 0, raf = 0, previous = 0;
+  function tick(now) {
+    const dt = Math.min((now - previous) / 1000, .04); previous = now;
+    const omega = 24, decay = Math.exp(-omega * dt);
+    const ix = vx + omega * (x - tx), iy = vy + omega * (y - ty);
+    x = tx + (x - tx + ix * dt) * decay; vx = (vx - omega * ix * dt) * decay;
+    y = ty + (y - ty + iy * dt) * decay; vy = (vy - omega * iy * dt) * decay;
+    surface.style.setProperty('--glass-x', `${x * 100}%`);
+    surface.style.setProperty('--glass-y', `${y * 100}%`);
+    if (Math.abs(x - tx) + Math.abs(y - ty) + Math.abs(vx) + Math.abs(vy) > .001) raf = requestAnimationFrame(tick);
+    else raf = 0;
+  }
+  function track(event) {
+    if (reducedMotion.matches || event.pointerType === 'touch') return;
+    const rect = surface.getBoundingClientRect();
+    tx = Math.max(0, Math.min(1, (event.clientX - rect.x) / rect.width));
+    ty = Math.max(0, Math.min(1, (event.clientY - rect.y) / rect.height));
+    if (!raf) { previous = performance.now(); raf = requestAnimationFrame(tick); }
+  }
+  host.addEventListener('pointerenter', event => { surface.classList.add('glass-hover'); track(event); });
+  host.addEventListener('pointermove', track);
+  host.addEventListener('pointerleave', () => surface.classList.remove('glass-hover'));
+  host.addEventListener('pointerdown', () => surface.classList.add('glass-pressed'));
+  const release = () => surface.classList.remove('glass-pressed');
+  window.addEventListener('pointerup', release);
+  window.addEventListener('pointercancel', release);
+  reducedMotion.addEventListener('change', () => {
+    cancelAnimationFrame(raf); raf = 0; vx = vy = 0;
+    surface.style.removeProperty('--glass-x'); surface.style.removeProperty('--glass-y');
+  });
+});
