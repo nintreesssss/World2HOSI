@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI: A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=20">
+  <link rel="stylesheet" href="style.css?v=21">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -117,39 +117,21 @@
       <section class="video-group" aria-labelledby="examples-title"><h3 id="examples-title">Object and scene interactions</h3><div class="video-grid three">
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/chair.webp" src="assets/videos/chair.mp4" aria-label="Move a chair" aria-describedby="chair-instruction" data-duration="18.025"></video>
-            <div class="video-controls" hidden>
-              <button class="video-toggle play-button" aria-label="Play Move a chair"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
-              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="18.025" value="0" step="0.01" aria-label="Seek Move a chair"><span class="timeline-thumb" aria-hidden="true"></span></div>
-              <span class="video-time">0:00 / 0:18</span>
-              <button class="video-fullscreen" aria-label="Fullscreen Move a chair"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
-            </div>
+            <video controls playsinline muted preload="metadata" poster="assets/videos/chair.webp" src="assets/videos/chair.mp4" aria-label="Move a chair" aria-describedby="chair-instruction" data-duration="18.025"></video>
             <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/chair.mp4">Open video</a></p>
           </div>
           <figcaption><p id="chair-instruction">Walk over to the chair, move it to the open area, and sit down.</p></figcaption>
         </figure>
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/box.webp" src="assets/videos/box.mp4" aria-label="Carry a box" aria-describedby="box-instruction" data-duration="7.767"></video>
-            <div class="video-controls" hidden>
-              <button class="video-toggle play-button" aria-label="Play Carry a box"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
-              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="7.767" value="0" step="0.01" aria-label="Seek Carry a box"><span class="timeline-thumb" aria-hidden="true"></span></div>
-              <span class="video-time">0:00 / 0:07</span>
-              <button class="video-fullscreen" aria-label="Fullscreen Carry a box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
-            </div>
+            <video controls playsinline muted preload="metadata" poster="assets/videos/box.webp" src="assets/videos/box.mp4" aria-label="Carry a box" aria-describedby="box-instruction" data-duration="7.767"></video>
             <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/box.mp4">Open video</a></p>
           </div>
           <figcaption><p id="box-instruction">Walk over to the box, pick it up, carry it along the counter, and put it down.</p></figcaption>
         </figure>
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/real-world.webp" src="assets/videos/real-world.mp4" aria-label="Real-world interaction" aria-describedby="real-world-instruction" data-duration="13.533"></video>
-            <div class="video-controls" hidden>
-              <button class="video-toggle play-button" aria-label="Play Real-world interaction"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
-              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="13.533" value="0" step="0.01" aria-label="Seek Real-world interaction"><span class="timeline-thumb" aria-hidden="true"></span></div>
-              <span class="video-time">0:00 / 0:13</span>
-              <button class="video-fullscreen" aria-label="Fullscreen Real-world interaction"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
-            </div>
+            <video controls playsinline muted preload="metadata" poster="assets/videos/real-world.webp" src="assets/videos/real-world.mp4" aria-label="Real-world interaction" aria-describedby="real-world-instruction" data-duration="13.533"></video>
             <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/real-world.mp4">Open video</a></p>
           </div>
           <figcaption><p id="real-world-instruction">Walk around the tables, pick up the trash bin, and move it to the open area.</p></figcaption>
@@ -158,26 +140,14 @@
       <section class="video-group" aria-labelledby="physics-title"><h3 id="physics-title">Physics-based refinement</h3><div class="video-grid two physics">
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/physics-books.webp" src="assets/videos/physics-books.mp4" aria-label="Carry books" aria-describedby="physics-books-instruction" data-duration="17.7"></video>
-            <div class="video-controls" hidden>
-              <button class="video-toggle play-button" aria-label="Play Carry books"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
-              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="17.7" value="0" step="0.01" aria-label="Seek Carry books"><span class="timeline-thumb" aria-hidden="true"></span></div>
-              <span class="video-time">0:00 / 0:17</span>
-              <button class="video-fullscreen" aria-label="Fullscreen Carry books"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
-            </div>
+            <video controls playsinline muted preload="metadata" poster="assets/videos/physics-books.webp" src="assets/videos/physics-books.mp4" aria-label="Carry books" aria-describedby="physics-books-instruction" data-duration="17.7"></video>
             <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-books.mp4">Open video</a></p>
           </div>
           <figcaption><p id="physics-books-instruction">Pick up the stack of books and carry it to the coffee table.</p></figcaption>
         </figure>
         <figure class="video-card">
           <div class="video-player">
-            <video controls playsinline muted preload="none" poster="assets/videos/physics-bin.webp" src="assets/videos/physics-bin.mp4" aria-label="Move a bin" aria-describedby="physics-bin-instruction" data-duration="9.167"></video>
-            <div class="video-controls" hidden>
-              <button class="video-toggle play-button" aria-label="Play Move a bin"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
-              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="9.167" value="0" step="0.01" aria-label="Seek Move a bin"><span class="timeline-thumb" aria-hidden="true"></span></div>
-              <span class="video-time">0:00 / 0:09</span>
-              <button class="video-fullscreen" aria-label="Fullscreen Move a bin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
-            </div>
+            <video controls playsinline muted preload="metadata" poster="assets/videos/physics-bin.webp" src="assets/videos/physics-bin.mp4" aria-label="Move a bin" aria-describedby="physics-bin-instruction" data-duration="9.167"></video>
             <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-bin.mp4">Open video</a></p>
           </div>
           <figcaption><p id="physics-bin-instruction">Pick up the bin, carry it to the open area, and put it down.</p></figcaption>
@@ -251,6 +221,6 @@
   </dialog>
   <script type="module" src="ui.js?v=11"></script>
   <script type="module" src="viewer.js?v=15"></script>
-  <script type="module" src="videos.js?v=2"></script>
+  <script type="module" src="videos.js?v=3"></script>
 </body>
 </html>

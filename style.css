@@ -42,9 +42,10 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .video-grid { display: grid; gap: 24px; align-items: stretch; }
 .video-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .video-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.video-grid.physics { max-width: 960px; margin-inline: auto; }
 .video-card { min-width: 0; margin: 0; border-radius: 0; border: 0; background: transparent; box-shadow: none; }
 .video-player { position: relative; }
-.video-player video { display: block; border-radius: 20px; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: #f5f5f7; }
+.video-player video { display: block; border-radius: 0; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: #f5f5f7; }
 .wide .video-player video { aspect-ratio: 2 / 1; }
 .physics .video-player video { aspect-ratio: 4 / 3; }
 .video-controls { display: flex; align-items: center; gap: 9px; width: calc(100% - 24px); max-width: 480px; height: 36px; margin: 10px auto 0; padding: 2px 0; background: transparent; border: 0; box-shadow: none; }
@@ -90,7 +91,7 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 @media (max-width: 700px) {
   .video-showcase { margin-top: 56px; }
   .video-showcase > h2 { margin: 0 4px 28px; font-size: 1.75rem; }
-  .video-player video { border-radius: 16px; }
+  .video-player video { border-radius: 0; }
   .video-group + .video-group { margin-top: 44px; }
   .video-group > h3 { margin: 0 4px 18px; font-size: 1.1875rem; }
   .video-grid.three, .video-grid.two { grid-template-columns: minmax(0, 1fr); }

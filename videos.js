@@ -4,6 +4,17 @@ const formatVideoTime = seconds => `${Math.floor(seconds / 60)}:${String(Math.fl
 for (const player of demoPlayers) {
   const video = player.querySelector('video');
   const controls = player.querySelector('.video-controls');
+  // All examples share playback coordination; only long clips get custom controls.
+  video.addEventListener('play', () => {
+    for (const other of demoPlayers) if (other !== player) other.querySelector('video').pause();
+    if (window.viewerState?.().playing) document.getElementById('play').click();
+  });
+  if (!controls) {
+    const error = player.querySelector('.video-error');
+    video.addEventListener('error', () => { error.hidden = false; });
+    video.addEventListener('playing', () => { error.hidden = true; });
+    continue;
+  }
   const toggle = player.querySelector('.video-toggle');
   const seek = player.querySelector('.video-seek');
   const timeline = player.querySelector('.video-timeline');
@@ -38,8 +49,6 @@ for (const player of demoPlayers) {
   });
   video.addEventListener('click', () => toggle.click());
   video.addEventListener('play', () => {
-    for (const other of demoPlayers) if (other !== player) other.querySelector('video').pause();
-    if (window.viewerState?.().playing) document.getElementById('play').click();
     sync();
     if (progressFrame === null) progressFrame = requestAnimationFrame(advanceProgress);
   });
