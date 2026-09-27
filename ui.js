@@ -180,7 +180,7 @@ reducedMotion.addEventListener('change', updateIcon);
 
 // Pointer-driven specular light, critically damped and idle when settled.
 // This decorates the material only: slider values remain one-to-one with input.
-document.querySelectorAll('.view-tools, .actions').forEach(host => {
+document.querySelectorAll('.view-tools').forEach(host => {
   const surface = host === actions ? indicator : host;
   let x = .5, y = .15, tx = .5, ty = .15, vx = 0, vy = 0, raf = 0, previous = 0;
   function tick(now) {
