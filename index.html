@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -33,11 +33,14 @@
         <div class="viewer-hint" id="viewer-hint">Drag to explore <span>·</span> Scroll to zoom</div>
       <div class="playback" aria-label="Animation playback controls">
         <div class="transport">
-          <button id="play" class="play-button" aria-label="Play animation" disabled><svg id="play-icon" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg></button>
+          <button id="play" class="play-button" aria-label="Play animation" disabled><svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4L13 7.5L13 16.5L7 20Z"/><path d="M13 7.5L20 12L20 12L13 16.5Z"/></svg></button>
           <button id="replay" class="icon-button" aria-label="Replay from the beginning" title="Replay" disabled><svg viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 9M3 4v6h6"/></svg></button>
           <div class="time-label"><span id="current-time">0:00.0</span><span class="time-separator">/</span><span id="duration">0:22.0</span></div>
         </div>
-        <input id="timeline" type="range" min="0" max="22.0333" step="0.01" value="0" aria-label="Animation time" disabled>
+        <div class="timeline-control">
+          <input id="timeline" type="range" min="0" max="22.0333" step="0.01" value="0" aria-label="Animation time" disabled>
+          <span class="timeline-thumb" aria-hidden="true"></span>
+        </div>
         <div class="play-options">
           <label class="speed-label" for="speed">Speed</label><select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
           <button id="loop" class="icon-button" aria-label="Loop playback" aria-pressed="true" title="Loop playback"><svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V8a2 2 0 0 1 2-2h16M7 22l-4-4 4-4m14-1v3a2 2 0 0 1-2 2H3"/></svg></button>
@@ -59,7 +62,7 @@
       <noscript><p class="noscript">Enable JavaScript to explore the interactive 3D scene. The teaser overview is shown above.</p></noscript>
     </section>
   </main>
-  <script type="module" src="ui.js?v=4"></script>
-  <script type="module" src="viewer.js?v=2"></script>
+  <script type="module" src="ui.js?v=5"></script>
+  <script type="module" src="viewer.js?v=5"></script>
 </body>
 </html>

@@ -38,19 +38,23 @@ svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width:
 .transport { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
 .play-button { display: grid; place-items: center; border: 0; width: 42px; height: 42px; border-radius: 50%; background: #1d1d1f; color: #fff; box-shadow: 0 2px 4px #00000012; }
 .play-button svg { width: 19px; height: 19px; fill: currentColor; stroke-width: 0; }
-.play-button[aria-label="Play animation"] svg { transform: translateX(1px); }
+.play-button svg { pointer-events: none; }
 .icon-button { display: grid; place-items: center; border: 0; background: transparent; color: #6e6e73; width: 34px; height: 38px; padding: 7px; border-radius: 18px; }
 .icon-button[aria-pressed="true"] { color: var(--ink); background: #00000007; }
 .time-label { font-size: .6875rem; letter-spacing: .01em; color: #85858b; font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 98px; margin-left: 3px; }
 .time-separator { margin: 0 6px; color: #b2b2b7; }
 #current-time { color: #424247; }
-#timeline { flex: 1; min-width: 70px; appearance: none; -webkit-appearance: none; height: 28px; margin: 0; border: 0; border-radius: 8px; background: transparent; cursor: pointer; touch-action: none; }
+.timeline-control { position: relative; flex: 1; min-width: 70px; height: 28px; }
+#timeline { position: relative; z-index: 1; display: block; width: 100%; appearance: none; -webkit-appearance: none; height: 28px; margin: 0; border: 0; border-radius: 8px; background: transparent; cursor: pointer; touch-action: none; }
 #timeline::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, #55555b var(--progress, 0%), #d3d3d8 var(--progress, 0%)); }
-#timeline::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; height: 14px; width: 14px; margin-top: -5px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px #00000029, 0 0 0 .5px #0000000a; transition: transform 150ms var(--ease-out); }
-#timeline:active::-webkit-slider-thumb { transform: scale(1.25); }
+#timeline::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; height: 18px; width: 18px; margin-top: -6.5px; border: 0; background: transparent; box-shadow: none; }
 #timeline::-moz-range-track { height: 4px; border-radius: 4px; background: #d3d3d8; }
 #timeline::-moz-range-progress { height: 4px; border-radius: 4px; background: #55555b; }
-#timeline::-moz-range-thumb { height: 14px; width: 14px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px #00000029; }
+#timeline::-moz-range-thumb { height: 18px; width: 18px; border: 0; background: transparent; box-shadow: none; }
+.timeline-thumb { position: absolute; z-index: 2; pointer-events: none; left: calc(9px + (100% - 18px) * var(--fraction, 0)); top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 999px; background: transparent; border: 1px solid #ffffffd9; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 1px #6f7b8c40, 0 2px 5px #24354e36; transition: width 260ms cubic-bezier(.22,1,.36,1), height 260ms cubic-bezier(.22,1,.36,1), box-shadow 240ms ease; }
+.timeline-thumb::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(145deg, #fff, #eaf0f5); opacity: 1; transition: opacity 240ms ease; }
+.timeline-control.is-dragging .timeline-thumb { width: 38px; height: 24px; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952, 0 3px 8px #24354e29; }
+.timeline-control.is-dragging .timeline-thumb::before { opacity: 0; }
 .play-options { display: flex; align-items: center; gap: 6px; }
 .speed-label { position: absolute; clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; white-space: nowrap; }
 select { font-size: .75rem; font-weight: 500; letter-spacing: .02em; border: 0; border-radius: 15px; background: transparent; padding: 8px 2px 8px 7px; min-height: 36px; cursor: pointer; }
@@ -123,8 +127,6 @@ progress::-webkit-progress-value { background: #77777c; }
 .selection-indicator::after { opacity: .8; }
 .action.active { color: #171d28; font-weight: 600; }
 #timeline::-webkit-slider-runnable-track { height: 5px; background: linear-gradient(to right, #526071 var(--progress, 0%), #4e5c702b var(--progress, 0%)); box-shadow: inset 0 1px 2px #0000001a, 0 1px 0 #ffffffa6; }
-#timeline::-webkit-slider-thumb { width: 18px; height: 18px; margin-top: -6.5px; background: linear-gradient(145deg, #fff, #eaf0f5a6); border: 1px solid #ffffffef; box-shadow: inset 0 -1px 2px #91a0b261, 0 2px 5px #26364c40; }
-#timeline::-moz-range-thumb { width: 18px; height: 18px; background: linear-gradient(145deg, #fff, #eaf0f5a6); border: 1px solid #ffffffef; box-shadow: inset 0 -1px 2px #91a0b261, 0 2px 5px #26364c40; }
 @media (hover: hover) and (pointer: fine) {
   .view-tools button:hover, .icon-button:hover, select:hover { background: #0000000c; color: var(--ink); transform: translateY(-2px); box-shadow: 0 4px 9px #0000000d; }
   .view-tools button:hover svg, .icon-button:hover svg { transform: scale(1.12); }
@@ -132,11 +134,12 @@ progress::-webkit-progress-value { background: #77777c; }
   .action:hover { transform: translateY(-2px); color: var(--ink); }
   .action:not(.active):hover { background: #e8e8ec; box-shadow: 0 3px 7px #00000009; }
   .action:hover .dot { transform: scale(1.3); box-shadow: 0 0 0 3px #00000006; }
-  #timeline:hover::-webkit-slider-thumb { transform: scale(1.3); }
+  .timeline-control:hover .timeline-thumb { width: 34px; height: 22px; }
+  .timeline-control:hover .timeline-thumb::before { opacity: 0; }
+  .timeline-control.is-dragging .timeline-thumb { width: 38px; height: 24px; }
 }
 button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-pressed { transform: translateY(1px) scale(.93); box-shadow: inset 0 1px 4px #00000013; transition-duration: 80ms; }
 .play-button.is-pressed:not(:disabled), .play-button:active:not(:disabled) { transform: scale(.88); }
-#timeline:active::-webkit-slider-thumb { transform: scale(1.5); }
 @media (max-width: 1020px) {
   .actions { flex-wrap: wrap; justify-content: center; border-radius: 22px; }
   .action { flex: 0 1 auto; padding: 10px 16px; }
@@ -160,7 +163,8 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
   .time-separator { margin: 0 4px; }
   .play-options { margin-left: auto; gap: 1px; }
   select { padding: 8px 0 8px 4px; font-size: .6875rem; }
-  #timeline { order: 3; flex-basis: 100%; height: 24px; margin: 0 3px; }
+  .timeline-control { order: 3; flex-basis: 100%; height: 24px; margin: 0 3px; }
+  #timeline { height: 24px; }
   .viewer-hint { bottom: 110px; font-size: .625rem; }
   .actions-header { margin: 25px 3px 13px; gap: 12px; }
   .actions-header > span:first-child { font-size: .9375rem; }
@@ -173,19 +177,22 @@ button.is-pressed:not(:disabled), button:active:not(:disabled), select.is-presse
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner { animation: none; }
-  button, select, .action .dot, .view-tools svg, .icon-button svg, .scrub-time, #timeline::-webkit-slider-thumb { transition: none; }
+  button, select, .action .dot, .view-tools svg, .icon-button svg, .scrub-time, .timeline-thumb, .timeline-thumb::before { transition: none; }
   button:hover, button:active:not(:disabled), button.is-pressed:not(:disabled), select:hover, select.is-pressed, .action:hover .dot, .view-tools button:hover svg, .icon-button:hover svg { transform: none; }
   button:active:not(:disabled), button.is-pressed:not(:disabled) { background-color: #dedee4; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .playback, .view-tools, .loading-card, .selection-indicator { background: #f7f7f9; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .playback::after, .view-tools::after, .selection-indicator::after { display: none; }
+  .timeline-control .timeline-thumb::before { opacity: 1; }
 }
 @media (prefers-contrast: more) {
   :root { --secondary: #414145; }
   .playback, .view-tools, .actions, .selection-indicator { box-shadow: inset 0 0 0 1px #727277; background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .action.active { outline: 1px solid #727277; }
   .control-note, .time-label, .viewer-hint { color: #414145; }
+  .timeline-thumb { border-color: #414145; }
+  .timeline-control .timeline-thumb::before { opacity: 1; }
 }
 @supports not (backdrop-filter: blur(1px)) {
   .playback, .view-tools, .selection-indicator { background-color: #f4f6f9eb; }

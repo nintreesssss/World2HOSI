@@ -12,8 +12,6 @@ const followPrevious = new THREE.Vector3();
 const cameraMotion = { active: false, eye: new THREE.Vector3(), target: new THREE.Vector3(), eyeVelocity: new THREE.Vector3(), targetVelocity: new THREE.Vector3() };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const allCaption = 'Navigate, interact, and continue — all within a reconstructed 3D world.';
-const playPath = 'm9 5 11 7-11 7z';
-const pausePath = 'M6 5h4v14H6zm8 0h4v14h-4z';
 
 function formatTime(t) {
   const minutes = Math.floor(t / 60);
@@ -25,13 +23,13 @@ function progress() {
   $('timeline').max = end;
   $('timeline').value = state.time;
   $('timeline').style.setProperty('--progress', `${Math.min(100, 100 * state.time / end)}%`);
+  $('timeline').parentElement.style.setProperty('--fraction', Math.min(1, state.time / end));
   $('timeline').setAttribute('aria-valuetext', `${formatTime(state.time)} of ${formatTime(end)}`);
   $('current-time').textContent = formatTime(state.time);
   $('duration').textContent = formatTime(end);
 }
 function play(playing) {
   state.playing = playing;
-  $('play-icon').firstElementChild.setAttribute('d', playing ? pausePath : playPath);
   $('play').setAttribute('aria-label', playing ? 'Pause animation' : 'Play animation');
 }
 function setTime(time) {
@@ -243,7 +241,7 @@ async function init() {
   $('loading').hidden = true;
   let previous = performance.now();
   function animate(now) {
-    const dt = Math.min((now - previous) / 1000, .1); previous = now;
+    const dt = Math.max(0, Math.min((now - previous) / 1000, .1)); previous = now;
     if (!document.hidden && state.playing && !state.dragging) {
       let time = state.time + dt * state.speed;
       if (time > duration()) {

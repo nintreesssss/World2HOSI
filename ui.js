@@ -49,7 +49,7 @@ document.querySelectorAll('button, select').forEach(control => {
 });
 
 const iconAnimations = new WeakMap();
-document.querySelectorAll('#play, #replay, #reset-camera, #loop, #fullscreen').forEach(button => {
+document.querySelectorAll('#replay, #reset-camera, #loop, #fullscreen').forEach(button => {
   button.addEventListener('click', event => {
     if (!event.detail || reducedMotion.matches) return;
     const icon = button.querySelector('svg');
@@ -62,28 +62,69 @@ document.querySelectorAll('#play, #replay, #reset-camera, #loop, #fullscreen').f
 });
 
 const timeline = document.getElementById('timeline');
+const timelineControl = timeline.parentElement;
 const timeTip = document.createElement('output');
 timeTip.className = 'scrub-time'; timeTip.setAttribute('aria-hidden', 'true');
 timeline.parentElement.append(timeTip);
 function updateTimeTip() {
   const t = Number(timeline.value), fraction = t / Number(timeline.max);
   timeTip.textContent = `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
-  timeTip.style.left = `${timeline.offsetLeft + 7 + (timeline.offsetWidth - 14) * fraction}px`;
+  timeTip.style.left = `${9 + (timeline.offsetWidth - 18) * fraction}px`;
   timeTip.style.top = `${timeline.offsetTop - 30}px`;
 }
 timeline.addEventListener('pointerenter', () => { updateTimeTip(); timeTip.classList.add('visible'); });
-timeline.addEventListener('pointerleave', () => timeTip.classList.remove('visible'));
+timeline.addEventListener('pointerleave', () => { if (!timelineControl.classList.contains('is-dragging')) timeTip.classList.remove('visible'); });
 timeline.addEventListener('input', updateTimeTip);
-timeline.addEventListener('pointerdown', () => { updateTimeTip(); timeTip.classList.add('visible'); });
-window.addEventListener('pointerup', () => { if (!timeline.matches(':hover')) timeTip.classList.remove('visible'); });
+timeline.addEventListener('pointerdown', () => { timelineControl.classList.add('is-dragging'); updateTimeTip(); timeTip.classList.add('visible'); });
+function releaseTimeline() {
+  timelineControl.classList.remove('is-dragging');
+  if (!timeline.matches(':hover')) timeTip.classList.remove('visible');
+}
+window.addEventListener('pointerup', releaseTimeline);
+window.addEventListener('pointercancel', releaseTimeline);
+window.addEventListener('blur', releaseTimeline);
+
+// Two matching polygons morph continuously between the triangle and pause bars.
+// Retarget from the live shape and velocity, including during rapid reversals.
+const playButton = document.getElementById('play');
+const paths = document.querySelectorAll('#play-icon path');
+const playPoints = [[7,4,13,7.5,13,16.5,7,20], [13,7.5,20,12,20,12,13,16.5]];
+const pausePoints = [[6,5,10,5,10,19,6,19], [14,5,18,5,18,19,14,19]];
+let iconPhase = 0, iconTarget = 0, iconVelocity = 0, iconFrame = 0, iconPrevious = 0, keyboardInput = false;
+document.addEventListener('keydown', () => keyboardInput = true, true);
+document.addEventListener('pointerdown', () => keyboardInput = false, true);
+function paintIcon() {
+  paths.forEach((path, index) => {
+    const points = playPoints[index].map((p, i) => p + (pausePoints[index][i] - p) * iconPhase);
+    path.setAttribute('d', `M${points[0]} ${points[1]}L${points[2]} ${points[3]}L${points[4]} ${points[5]}L${points[6]} ${points[7]}Z`);
+  });
+}
+function animateIcon(now) {
+  // A queued RAF timestamp can precede an event's performance.now() on a busy frame.
+  const dt = Math.max(0, Math.min((now - iconPrevious) / 1000, .04)); iconPrevious = now;
+  const omega = 30, decay = Math.exp(-omega * dt), offset = iconPhase - iconTarget, impulse = iconVelocity + omega * offset;
+  iconPhase = iconTarget + (offset + impulse * dt) * decay;
+  iconVelocity = (iconVelocity - omega * impulse * dt) * decay;
+  paintIcon();
+  if (Math.abs(iconPhase - iconTarget) + Math.abs(iconVelocity) > .002) iconFrame = requestAnimationFrame(animateIcon);
+  else { iconPhase = iconTarget; iconVelocity = 0; paintIcon(); iconFrame = 0; }
+}
+function updateIcon() {
+  iconTarget = playButton.getAttribute('aria-label') === 'Pause animation' ? 1 : 0;
+  if (reducedMotion.matches || keyboardInput) {
+    cancelAnimationFrame(iconFrame); iconFrame = 0; iconPhase = iconTarget; iconVelocity = 0; paintIcon();
+  } else if (!iconFrame) { iconPrevious = performance.now(); iconFrame = requestAnimationFrame(animateIcon); }
+}
+new MutationObserver(updateIcon).observe(playButton, { attributes: true, attributeFilter: ['aria-label'] });
+reducedMotion.addEventListener('change', updateIcon);
 
 // Pointer-driven specular light, critically damped and idle when settled.
 // This decorates the material only: slider values remain one-to-one with input.
-document.querySelectorAll('.playback, .view-tools, .actions').forEach(host => {
+document.querySelectorAll('.view-tools, .actions').forEach(host => {
   const surface = host === actions ? indicator : host;
   let x = .5, y = .15, tx = .5, ty = .15, vx = 0, vy = 0, raf = 0, previous = 0;
   function tick(now) {
-    const dt = Math.min((now - previous) / 1000, .04); previous = now;
+    const dt = Math.max(0, Math.min((now - previous) / 1000, .04)); previous = now;
     const omega = 24, decay = Math.exp(-omega * dt);
     const ix = vx + omega * (x - tx), iy = vy + omega * (y - ty);
     x = tx + (x - tx + ix * dt) * decay; vx = (vx - omega * ix * dt) * decay;
