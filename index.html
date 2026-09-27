@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -20,9 +20,9 @@
       <div class="viewer-shell" id="viewer-shell">
         <div id="viewport" role="img" aria-label="Interactive reconstructed home with six animated human-object interactions"></div>
         <div class="viewer-topbar">
-          <span class="live-badge"><span></span> INTERACTIVE 3D</span>
+          <span class="live-badge"><span></span> Interactive scene</span>
           <div class="view-tools">
-            <button id="reset-camera" title="Reset the camera" aria-label="Reset camera" disabled><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9"/></svg><span>Reset view</span></button>
+            <button id="reset-camera" title="Reset the camera" aria-label="Reset camera" disabled><svg viewBox="0 0 24 24"><path d="M4 9a8 8 0 1 1 0 6M4 4v5h5"/></svg><span>Reset view</span></button>
             <button id="fullscreen" title="Enter fullscreen" aria-label="Enter fullscreen"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
           </div>
         </div>
@@ -30,8 +30,7 @@
           <img src="assets/teaser-poster.webp" alt="Overview of the six teaser interactions" width="1600" height="1200">
           <div class="loading-card"><span class="spinner" aria-hidden="true"></span><strong id="loading-text">Loading the 3D scene</strong><span id="loading-detail">Preparing the home and its six interactions…</span><progress id="load-progress" max="100" value="0"></progress><button id="retry" hidden>Try again</button></div>
         </div>
-        <div class="viewer-hint" id="viewer-hint">Drag to rotate <span>·</span> Scroll to zoom <span>·</span> Right-drag to pan</div>
-      </div>
+        <div class="viewer-hint" id="viewer-hint">Drag to explore <span>·</span> Scroll to zoom</div>
       <div class="playback" aria-label="Animation playback controls">
         <div class="transport">
           <button id="play" class="play-button" aria-label="Play animation" disabled><svg id="play-icon" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7z"/></svg></button>
@@ -44,13 +43,22 @@
           <button id="loop" class="icon-button" aria-label="Loop playback" aria-pressed="true" title="Loop playback"><svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V8a2 2 0 0 1 2-2h16M7 22l-4-4 4-4m14-1v3a2 2 0 0 1-2 2H3"/></svg></button>
         </div>
       </div>
-      <div class="actions-header"><span>Explore the interactions</span><span id="selection-note">One scene. Six stories.</span></div>
-      <div id="actions" class="actions" role="group" aria-label="Select an interaction to explore"><button data-track="all" class="action active" aria-pressed="true" disabled>All actions</button></div>
+      </div>
+      <div class="actions-header"><span>Six interactions. One world.</span><span id="selection-note">Explore an action</span></div>
+      <div id="actions" class="actions" role="group" aria-label="Select an interaction to explore">
+        <button data-track="all" class="action active" aria-pressed="true" disabled>All actions</button>
+        <button data-track="chair" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#3175b4" aria-hidden="true"></span>Move the chair</button>
+        <button data-track="piano" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#8958b9" aria-hidden="true"></span>Play the piano</button>
+        <button data-track="kitchen" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#d37536" aria-hidden="true"></span>Wash the dishes</button>
+        <button data-track="sofa" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#57994c" aria-hidden="true"></span>Sit on the sofa</button>
+        <button data-track="fruit" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#319ba7" aria-hidden="true"></span>Carry the fruit</button>
+        <button data-track="bowl" class="action" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span>Inspect the bowl</button>
+      </div>
       <p id="action-caption" class="caption">Navigate, interact, and continue — all within a reconstructed 3D world.</p>
       <p class="control-note">Choose an action to explore and control it individually, or play all six together.</p>
       <noscript><p class="noscript">Enable JavaScript to explore the interactive 3D scene. The teaser overview is shown above.</p></noscript>
     </section>
   </main>
-  <script type="module" src="viewer.js"></script>
+  <script type="module" src="viewer.js?v=2"></script>
 </body>
 </html>

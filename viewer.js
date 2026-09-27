@@ -9,6 +9,8 @@ const actors = new Map(), props = [];
 let config, renderer, scene, camera, controls, spark, frameId;
 const q0 = new THREE.Quaternion(), q1 = new THREE.Quaternion();
 const followPrevious = new THREE.Vector3();
+const cameraMotion = { active: false, eye: new THREE.Vector3(), target: new THREE.Vector3(), eyeVelocity: new THREE.Vector3(), targetVelocity: new THREE.Vector3() };
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const allCaption = 'Navigate, interact, and continue — all within a reconstructed 3D world.';
 const playPath = 'm9 5 11 7-11 7z';
 const pausePath = 'M6 5h4v14H6zm8 0h4v14h-4z';
@@ -42,7 +44,7 @@ function setTime(time) {
 }
 
 async function asset(name, onProgress) {
-  const response = await fetch(new URL(`assets/${name}`, import.meta.url));
+  const response = await fetch(new URL(`assets/${name}?v=2`, import.meta.url));
   if (!response.ok) throw new Error(`Unable to load ${name} (${response.status})`);
   let bytes;
   if (onProgress && response.body) {
@@ -124,14 +126,34 @@ function updatePoses() {
     const current = actors.get(state.selected).bones[0].position;
     const delta = current.clone().sub(followPrevious);
     camera.position.add(delta); controls.target.add(delta); followPrevious.copy(current);
+    if (cameraMotion.active) { cameraMotion.eye.add(delta); cameraMotion.target.add(delta); }
   }
 }
-function home() {
-  camera.position.fromArray(config.camera.eye);
-  controls.target.fromArray(config.camera.target);
+function moveCamera(eye, target, animate) {
+  cameraMotion.eye.copy(eye); cameraMotion.target.copy(target);
+  cameraMotion.active = Boolean(animate && state.ready && !reducedMotion.matches);
+  if (cameraMotion.active) return;
+  cameraMotion.eyeVelocity.set(0, 0, 0); cameraMotion.targetVelocity.set(0, 0, 0);
+  camera.position.copy(eye); controls.target.copy(target);
   controls.update();
 }
-function select(id) {
+function springCamera(dt) {
+  if (!cameraMotion.active) return;
+  // Exact critically damped spring: stable at variable frame rates and interruptible.
+  const omega = 19, decay = Math.exp(-omega * dt);
+  for (const [value, goal, velocity] of [[camera.position, cameraMotion.eye, cameraMotion.eyeVelocity], [controls.target, cameraMotion.target, cameraMotion.targetVelocity]]) {
+    for (const axis of ['x', 'y', 'z']) {
+      const offset = value[axis] - goal[axis], impulse = velocity[axis] + omega * offset;
+      value[axis] = goal[axis] + (offset + impulse * dt) * decay;
+      velocity[axis] = (velocity[axis] - omega * impulse * dt) * decay;
+    }
+  }
+  if (camera.position.distanceToSquared(cameraMotion.eye) + controls.target.distanceToSquared(cameraMotion.target) < 1e-7) moveCamera(cameraMotion.eye, cameraMotion.target, false);
+}
+function home(animate = false) {
+  moveCamera(new THREE.Vector3().fromArray(config.camera.eye), new THREE.Vector3().fromArray(config.camera.target), animate);
+}
+function select(id, animate = true) {
   state.selected = id;
   document.querySelectorAll('[data-track]').forEach(button => {
     const active = button.dataset.track === id;
@@ -139,17 +161,16 @@ function select(id) {
   });
   if (id === 'all') {
     state.time = 0;
-    home();
+    home(animate);
     $('action-caption').textContent = allCaption;
-    $('selection-note').textContent = 'One scene. Six stories.';
+    $('selection-note').textContent = 'Explore an action';
   } else {
     const actor = actors.get(id);
     state.time = actor.time;
     followPrevious.copy(actor.bones[0].position);
-    controls.target.copy(followPrevious).add(new THREE.Vector3(0, 0, .15));
+    const target = followPrevious.clone().add(new THREE.Vector3(0, 0, .15));
     const direction = new THREE.Vector3().fromArray(config.camera.eye).sub(new THREE.Vector3().fromArray(config.camera.target)).normalize();
-    camera.position.copy(controls.target).addScaledVector(direction, 3.8);
-    controls.update();
+    moveCamera(target.clone().addScaledVector(direction, 3.8), target, animate);
     $('action-caption').textContent = actor.description;
     $('selection-note').textContent = 'Individual playback';
   }
@@ -172,7 +193,7 @@ function error(message) {
   $('load-progress').hidden = true; $('retry').hidden = false;
 }
 async function init() {
-  const response = await fetch('./assets/scene.json');
+  const response = await fetch('./assets/scene.json?v=2');
   if (!response.ok) throw new Error('Scene configuration is unavailable. Please reload the page.');
   config = await response.json();
   renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'high-performance' });
@@ -189,6 +210,10 @@ async function init() {
   controls.minDistance = 1.3; controls.maxDistance = 30;
   controls.maxPolarAngle = Math.PI / 2 - .04;
   controls.screenSpacePanning = true;
+  controls.addEventListener('start', () => {
+    cameraMotion.active = false;
+    cameraMotion.eyeVelocity.set(0, 0, 0); cameraMotion.targetVelocity.set(0, 0, 0);
+  });
   home(); resize(); new ResizeObserver(resize).observe(viewport);
   scene.add(new THREE.HemisphereLight(0xffffff, 0xadb4c2, 2.5));
   const key = new THREE.DirectionalLight(0xffffff, 2.7); key.position.set(6, 0, 10); scene.add(key);
@@ -209,13 +234,8 @@ async function init() {
   $('loading-text').textContent = 'Preparing the first view'; $('load-progress').value = 95;
   updatePoses();
   await spark.update({ scene, camera });
-  for (const track of config.tracks) {
-    const button = document.createElement('button'); button.className = 'action'; button.dataset.track = track.id;
-    button.setAttribute('aria-pressed', 'false'); button.style.setProperty('--track-color', track.color);
-    const dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden', 'true');
-    button.append(dot, document.createTextNode(track.title)); $('actions').appendChild(button);
-  }
-  $('actions').addEventListener('click', event => { const button = event.target.closest('[data-track]'); if (button) select(button.dataset.track); });
+  for (const track of config.tracks) document.querySelector(`[data-track="${track.id}"]`).style.setProperty('--track-color', track.color);
+  $('actions').addEventListener('click', event => { const button = event.target.closest('[data-track]'); if (button) select(button.dataset.track, event.detail !== 0); });
   document.querySelectorAll('button[disabled], input[disabled]').forEach(el => el.disabled = false);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); error('Your browser paused the 3D renderer. Reload to continue.'); });
   state.ready = true; progress();
@@ -232,7 +252,7 @@ async function init() {
       }
       setTime(time);
     }
-    controls.update(); renderer.render(scene, camera);
+    springCamera(dt); controls.update(); renderer.render(scene, camera);
     frameId = requestAnimationFrame(animate);
   }
   frameId = requestAnimationFrame(animate);
@@ -248,7 +268,7 @@ window.addEventListener('pointerup', () => state.dragging = false);
 window.addEventListener('pointercancel', () => state.dragging = false);
 $('speed').addEventListener('change', event => state.speed = Number(event.target.value));
 $('loop').addEventListener('click', () => { state.loop = !state.loop; $('loop').setAttribute('aria-pressed', String(state.loop)); });
-$('reset-camera').addEventListener('click', () => { if (state.selected === 'all') home(); else select(state.selected); });
+$('reset-camera').addEventListener('click', event => { if (state.selected === 'all') home(event.detail !== 0); else select(state.selected, event.detail !== 0); });
 $('fullscreen').addEventListener('click', async () => {
   try { if (document.fullscreenElement) await document.exitFullscreen(); else await $('viewer-shell').requestFullscreen(); }
   catch { $('viewer-hint').textContent = 'Fullscreen is not available in this browser. Drag to rotate; scroll to zoom.'; }
