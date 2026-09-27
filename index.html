@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI: A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=19">
+  <link rel="stylesheet" href="style.css?v=20">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
 <body>
@@ -84,7 +84,8 @@
         </a>
       </figure>
     </section>
-    <div class="video-showcase">
+    <section class="video-showcase" aria-labelledby="interaction-examples-title">
+      <h2 id="interaction-examples-title">Interaction examples</h2>
       <section class="video-group" aria-labelledby="long-horizon-title"><h3 id="long-horizon-title">Long-horizon tasks</h3><div class="video-grid two wide">
         <figure class="video-card">
           <div class="video-player">
@@ -113,7 +114,7 @@
           <figcaption><p id="long-books-instruction">Walk over and move the books to the table nearby, then walk over and adjust the stool, and finally sit down.</p></figcaption>
         </figure>
       </div></section>
-      <section class="video-group" aria-labelledby="examples-title"><h3 id="examples-title">Interaction examples</h3><div class="video-grid three">
+      <section class="video-group" aria-labelledby="examples-title"><h3 id="examples-title">Object and scene interactions</h3><div class="video-grid three">
         <figure class="video-card">
           <div class="video-player">
             <video controls playsinline muted preload="none" poster="assets/videos/chair.webp" src="assets/videos/chair.mp4" aria-label="Move a chair" aria-describedby="chair-instruction" data-duration="18.025"></video>
@@ -182,14 +183,24 @@
           <figcaption><p id="physics-bin-instruction">Pick up the bin, carry it to the open area, and put it down.</p></figcaption>
         </figure>
       </div></section>
-    </div>
+    </section>
     <section class="comparisons" aria-labelledby="comparisons-title">
       <h2 id="comparisons-title">Comparison with baselines</h2>
       <figure class="comparison-row" aria-describedby="compare-chair-task">
         <div class="comparison-scroll" tabindex="0" aria-label="Move the chair, put it down, and sit on it. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
-            <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-poster.webp?v=2"><img src="assets/comparisons/chair.webp?v=2" width="1920" height="462" loading="lazy" decoding="async" draggable="false" alt="Side-by-side animated comparison of InfBaGel, HOSIG and World2HOSI. Move the chair, put it down, and sit on it."></picture></div>
-            <div class="comparison-labels" aria-hidden="true"><span>InfBaGel</span><span>HOSIG</span><span>World2HOSI <small>(Ours)</small></span></div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-infbagel-poster.webp"><img src="assets/comparisons/chair-infbagel.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-hosig-poster.webp"><img src="assets/comparisons/chair-hosig.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-world2hosi-poster.webp"><img src="assets/comparisons/chair-world2hosi.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
           </div>
         </div>
         <figcaption id="compare-chair-task">Move the chair, put it down, and sit on it.</figcaption>
@@ -197,8 +208,18 @@
       <figure class="comparison-row" aria-describedby="compare-box-task">
         <div class="comparison-scroll" tabindex="0" aria-label="Pick up the box, carry it across the café, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
-            <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-poster.webp"><img src="assets/comparisons/box.webp" width="1920" height="244" loading="lazy" decoding="async" draggable="false" alt="Side-by-side animated comparison of InfBaGel, HOSIG and World2HOSI. Pick up the box, carry it across the café, and put it down."></picture></div>
-            <div class="comparison-labels" aria-hidden="true"><span>InfBaGel</span><span>HOSIG</span><span>World2HOSI <small>(Ours)</small></span></div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-infbagel-poster.webp"><img src="assets/comparisons/box-infbagel.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping box task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-hosig-poster.webp"><img src="assets/comparisons/box-hosig.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping box task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-world2hosi-poster.webp"><img src="assets/comparisons/box-world2hosi.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping box task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
           </div>
         </div>
         <figcaption id="compare-box-task">Pick up the box, carry it across the café, and put it down.</figcaption>
@@ -206,8 +227,18 @@
       <figure class="comparison-row" aria-describedby="compare-bin-task">
         <div class="comparison-scroll" tabindex="0" aria-label="Pick up the trash bin, carry it around the tables, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
-            <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-poster.webp"><img src="assets/comparisons/bin.webp" width="1920" height="500" loading="lazy" decoding="async" draggable="false" alt="Side-by-side animated comparison of InfBaGel, HOSIG and World2HOSI. Pick up the trash bin, carry it around the tables, and put it down."></picture></div>
-            <div class="comparison-labels" aria-hidden="true"><span>InfBaGel</span><span>HOSIG</span><span>World2HOSI <small>(Ours)</small></span></div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-infbagel-poster.webp"><img src="assets/comparisons/bin-infbagel.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-hosig-poster.webp"><img src="assets/comparisons/bin-hosig.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-world2hosi-poster.webp"><img src="assets/comparisons/bin-world2hosi.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
           </div>
         </div>
         <figcaption id="compare-bin-task">Pick up the trash bin, carry it around the tables, and put it down.</figcaption>

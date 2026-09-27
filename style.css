@@ -21,11 +21,12 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .comparison-row { margin: 0 0 48px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .comparison-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #bbc5d2 transparent; }
 .comparison-scroll:focus-visible { outline: 2px solid #0071e3a0; outline-offset: -2px; border-radius: 12px; }
-.comparison-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px 0 0; text-align: center; font-size: .9375rem; font-weight: 550; color: #495360; }
-.comparison-labels small { font-size: inherit; font-weight: 400; color: #727b87; }
+.comparison-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.comparison-method { min-width: 0; }
+.comparison-label { padding: 12px 0 0; text-align: center; font-size: .9375rem; font-weight: 550; color: #495360; }
+.comparison-label small { font-size: inherit; font-weight: 400; color: #727b87; }
 .comparison-visual { position: relative; overflow: hidden; border-radius: 0; user-select: none; -webkit-user-select: none; }
 .comparison-visual img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; }
-.comparison-visual::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to right, transparent calc(100% / 3 - 2px), #fff calc(100% / 3 - 2px), #fff calc(100% / 3 + 2px), transparent calc(100% / 3 + 2px), transparent calc(200% / 3 - 2px), #fff calc(200% / 3 - 2px), #fff calc(200% / 3 + 2px), transparent calc(200% / 3 + 2px)); }
 .comparison-row figcaption { padding: 12px 0 0; color: #62626a; font-size: .9375rem; line-height: 1.7; text-align: center; }
 @media (max-width: 700px) {
   .comparisons { margin-top: 56px; }
@@ -35,6 +36,7 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
   .comparison-row figcaption { padding: 12px 0 0; text-align: center; }
 }
 .video-showcase { margin-top: 88px; }
+.video-showcase > h2 { margin: 0 8px 36px; font-size: 2rem; font-weight: 600; letter-spacing: -.045em; line-height: 1.2; }
 .video-group + .video-group { margin-top: 64px; }
 .video-group > h3 { margin: 0 8px 22px; font-size: 1.375rem; font-weight: 550; letter-spacing: -.025em; line-height: 1.3; color: #414852; }
 .video-grid { display: grid; gap: 24px; align-items: stretch; }
@@ -42,7 +44,7 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .video-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .video-card { min-width: 0; margin: 0; border-radius: 0; border: 0; background: transparent; box-shadow: none; }
 .video-player { position: relative; }
-.video-player video { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: #f5f5f7; }
+.video-player video { display: block; border-radius: 20px; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; background: #f5f5f7; }
 .wide .video-player video { aspect-ratio: 2 / 1; }
 .physics .video-player video { aspect-ratio: 4 / 3; }
 .video-controls { display: flex; align-items: center; gap: 9px; width: calc(100% - 24px); max-width: 480px; height: 36px; margin: 10px auto 0; padding: 2px 0; background: transparent; border: 0; box-shadow: none; }
@@ -77,7 +79,7 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 .video-error { margin: 0; padding: 10px 18px; font-size: .8125rem; color: #62626a; }
 .video-error a { color: #28659e; }
 .video-player:fullscreen { width: 100%; height: 100%; display: flex; flex-direction: column; background: #121416; }
-.video-player:fullscreen video { flex: 1; min-height: 0; height: calc(100% - 60px); aspect-ratio: auto; object-fit: contain; background: #121416; }
+.video-player:fullscreen video { border-radius: 0; flex: 1; min-height: 0; height: calc(100% - 60px); aspect-ratio: auto; object-fit: contain; background: #121416; }
 .video-player:fullscreen .video-controls { flex-shrink: 0; width: 100%; max-width: none; height: 60px; margin: 0; padding-inline: max(20px, calc((100vw - 1000px) / 2)); background: #f5f7fa; }
 @media (max-width: 1000px) and (min-width: 701px) {
   .video-grid { gap: 14px; }
@@ -87,6 +89,8 @@ h1 { margin: 0; font-weight: 600; font-optical-sizing: auto; }
 }
 @media (max-width: 700px) {
   .video-showcase { margin-top: 56px; }
+  .video-showcase > h2 { margin: 0 4px 28px; font-size: 1.75rem; }
+  .video-player video { border-radius: 16px; }
   .video-group + .video-group { margin-top: 44px; }
   .video-group > h3 { margin: 0 4px 18px; font-size: 1.1875rem; }
   .video-grid.three, .video-grid.two { grid-template-columns: minmax(0, 1fr); }
