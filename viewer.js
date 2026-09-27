@@ -61,7 +61,7 @@ function setTime(time) {
 }
 
 async function asset(name, onProgress) {
-  const revision = name.endsWith('-motion.bin.gz') ? 3 : 2;
+  const revision = name.endsWith('-motion.bin.gz') ? 4 : 2;
   const response = await fetch(new URL(`assets/${name}?v=${revision}`, import.meta.url));
   if (!response.ok) throw new Error(`Unable to load ${name} (${response.status})`);
   let bytes;
@@ -213,7 +213,7 @@ function error(message) {
   $('load-status').textContent = message;
 }
 async function init() {
-  const response = await fetch('./assets/scene.json?v=2');
+  const response = await fetch('./assets/scene.json?v=3');
   if (!response.ok) throw new Error('Scene configuration is unavailable. Please reload the page.');
   config = await response.json();
   arrivalProgress.value = reducedMotion.matches ? 1 : 0;

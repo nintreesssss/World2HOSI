@@ -43,9 +43,9 @@
         0.065,
         0.42
       ],
-      "frames": 460,
-      "fps": 30.000000000000107,
-      "duration": 15.3,
+      "frames": 360,
+      "fps": 30,
+      "duration": 11.966666666666667,
       "geometry": "piano-geometry.json.gz",
       "motion": "piano-motion.bin.gz"
     },
@@ -59,9 +59,9 @@
         0.13,
         0.025
       ],
-      "frames": 418,
-      "fps": 30.000000000000107,
-      "duration": 13.9,
+      "frames": 360,
+      "fps": 30,
+      "duration": 11.966666666666667,
       "geometry": "kitchen-geometry.json.gz",
       "motion": "kitchen-motion.bin.gz"
     },
@@ -75,9 +75,9 @@
         0.35,
         0.045
       ],
-      "frames": 336,
-      "fps": 30.000000000000107,
-      "duration": 11.166666666666666,
+      "frames": 240,
+      "fps": 30,
+      "duration": 7.966666666666667,
       "geometry": "sofa-geometry.json.gz",
       "motion": "sofa-motion.bin.gz"
     },
@@ -91,9 +91,9 @@
         0.29,
         0.34
       ],
-      "frames": 490,
-      "fps": 30.000000000000107,
-      "duration": 16.3,
+      "frames": 420,
+      "fps": 30,
+      "duration": 13.966666666666667,
       "geometry": "fruit-geometry.json.gz",
       "motion": "fruit-motion.bin.gz"
     },
@@ -107,9 +107,9 @@
         0.045,
         0.2
       ],
-      "frames": 360,
-      "fps": 30.000000000000107,
-      "duration": 11.966666666666667,
+      "frames": 300,
+      "fps": 30,
+      "duration": 9.966666666666667,
       "geometry": "bowl-geometry.json.gz",
       "motion": "bowl-motion.bin.gz"
     }
@@ -118,21 +118,21 @@
     {
       "id": "163",
       "track": "bowl",
-      "frames": 360,
+      "frames": 300,
       "file": "163.splat.gz",
       "motion": "163-motion.bin.gz"
     },
     {
       "id": "207",
       "track": "fruit",
-      "frames": 490,
+      "frames": 420,
       "file": "207.splat.gz",
       "motion": "207-motion.bin.gz"
     },
     {
       "id": "209",
       "track": "fruit",
-      "frames": 490,
+      "frames": 420,
       "file": "209.splat.gz",
       "motion": "209-motion.bin.gz"
     },
