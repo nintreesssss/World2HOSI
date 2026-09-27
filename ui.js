@@ -279,31 +279,109 @@ document.querySelectorAll('.view-tools').forEach(host => {
   });
 });
 
-// Native dialog keeps keyboard focus inside the enlarged figure and restores it on close.
+// Native dialog owns focus; the figure uses cursor-anchored zoom and direct pan.
 const pipelineDialog = document.querySelector('.pipeline-dialog');
 const pipelineScroll = document.querySelector('.pipeline-scroll');
+const pipelineImage = pipelineScroll.querySelector('img');
 const pipelineZoom = document.getElementById('pipeline-zoom');
+let figureScale = 1, figureX = 0, figureY = 0, figureWidth = 0, figureHeight = 0;
+const figurePointers = new Map();
+const clampFigure = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+function drawFigure() {
+  const w = pipelineScroll.clientWidth, h = pipelineScroll.clientHeight;
+  const sw = figureWidth * figureScale, sh = figureHeight * figureScale;
+  figureX = sw <= w ? (w - sw) / 2 : clampFigure(figureX, w - sw, 0);
+  figureY = sh <= h ? (h - sh) / 2 : clampFigure(figureY, h - sh, 0);
+  pipelineImage.style.transform = `translate(${figureX}px, ${figureY}px) scale(${figureScale})`;
+  pipelineZoom.setAttribute('aria-pressed', String(figureScale > 1.001));
+  pipelineZoom.textContent = figureScale > 1.001 ? 'Fit to view' : 'Zoom in';
+}
+function fitFigure() {
+  const w = pipelineScroll.clientWidth, h = pipelineScroll.clientHeight;
+  if (!w || !h) return;
+  figureWidth = Math.min(w - 24, (h - 24) * 3330 / 1504);
+  figureHeight = figureWidth * 1504 / 3330;
+  pipelineImage.style.width = `${figureWidth}px`;
+  figureScale = 1; figureX = 0; figureY = 0;
+  drawFigure();
+}
+function zoomFigure(scale, anchor, destination = anchor) {
+  const next = clampFigure(scale, 1, 8), ratio = next / figureScale;
+  figureX = destination.x - (anchor.x - figureX) * ratio;
+  figureY = destination.y - (anchor.y - figureY) * ratio;
+  figureScale = next; drawFigure();
+}
+function figurePoint(event) {
+  const r = pipelineScroll.getBoundingClientRect();
+  return { x: event.clientX - r.left, y: event.clientY - r.top };
+}
+function pinchGeometry(points) {
+  const [a,b] = points;
+  return { center: { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }, distance: Math.hypot(a.x-b.x,a.y-b.y) };
+}
 document.querySelector('.pipeline-open').addEventListener('click', event => {
   if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
-  pipelineScroll.classList.remove('is-zoomed');
-  pipelineZoom.setAttribute('aria-pressed', 'false');
-  pipelineZoom.textContent = 'Zoom in';
   pipelineDialog.showModal();
-  pipelineScroll.scrollTo(0, 0);
+  document.documentElement.classList.add('pipeline-modal-open');
+  fitFigure();
   if (!reducedMotion.matches) pipelineDialog.animate(
     [{ opacity: 0, transform: 'translateY(10px) scale(.98)' }, { opacity: 1, transform: 'none' }],
     { duration: 220, easing: 'cubic-bezier(.22,1,.36,1)' }
   );
 });
 document.getElementById('pipeline-close').addEventListener('click', () => pipelineDialog.close());
+pipelineDialog.addEventListener('close', () => {
+  document.documentElement.classList.remove('pipeline-modal-open');
+  figurePointers.clear(); pipelineScroll.classList.remove('is-dragging');
+});
 pipelineDialog.addEventListener('click', event => {
   const r = pipelineDialog.getBoundingClientRect();
   if (event.target === pipelineDialog && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)) pipelineDialog.close();
 });
 pipelineZoom.addEventListener('click', () => {
-  const zoomed = pipelineScroll.classList.toggle('is-zoomed');
-  pipelineZoom.setAttribute('aria-pressed', String(zoomed));
-  pipelineZoom.textContent = zoomed ? 'Fit to view' : 'Zoom in';
-  if (!zoomed) pipelineScroll.scrollTo(0, 0);
+  if (figureScale > 1.001) fitFigure();
+  else zoomFigure(2.5, { x:pipelineScroll.clientWidth/2, y:pipelineScroll.clientHeight/2 });
 });
+pipelineScroll.addEventListener('wheel', event => {
+  event.preventDefault();
+  const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? pipelineScroll.clientHeight : 1);
+  zoomFigure(figureScale * Math.exp(-clampFigure(delta,-200,200)*.003), figurePoint(event));
+}, { passive:false });
+pipelineScroll.addEventListener('pointerdown', event => {
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  pipelineScroll.focus({ preventScroll:true });
+  pipelineScroll.setPointerCapture(event.pointerId);
+  figurePointers.set(event.pointerId, figurePoint(event));
+  pipelineScroll.classList.add('is-dragging');
+});
+pipelineScroll.addEventListener('pointermove', event => {
+  if (!figurePointers.has(event.pointerId)) return;
+  const previous = [...figurePointers.values()];
+  figurePointers.set(event.pointerId, figurePoint(event));
+  const current = [...figurePointers.values()];
+  if (current.length === 1) {
+    figureX += current[0].x - previous[0].x;
+    figureY += current[0].y - previous[0].y; drawFigure();
+  } else {
+    const before = pinchGeometry(previous), after = pinchGeometry(current);
+    if (before.distance > 1) zoomFigure(figureScale * after.distance / before.distance, before.center, after.center);
+  }
+});
+for (const type of ['pointerup','pointercancel','lostpointercapture']) pipelineScroll.addEventListener(type, event => {
+  figurePointers.delete(event.pointerId);
+  if (!figurePointers.size) pipelineScroll.classList.remove('is-dragging');
+});
+pipelineScroll.addEventListener('keydown', event => {
+  const center = { x:pipelineScroll.clientWidth/2, y:pipelineScroll.clientHeight/2 };
+  if (event.key === '+' || event.key === '=') zoomFigure(figureScale*1.25,center);
+  else if (event.key === '-') zoomFigure(figureScale/1.25,center);
+  else if (event.key === '0' || event.key === 'Home') fitFigure();
+  else if (event.key.startsWith('Arrow')) {
+    figureX += event.key === 'ArrowLeft' ? 60 : event.key === 'ArrowRight' ? -60 : 0;
+    figureY += event.key === 'ArrowUp' ? 60 : event.key === 'ArrowDown' ? -60 : 0;
+    drawFigure();
+  } else return;
+  event.preventDefault();
+});
+new ResizeObserver(() => { if (pipelineDialog.open) fitFigure(); }).observe(pipelineScroll);
