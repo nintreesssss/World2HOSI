@@ -61,7 +61,7 @@ function setTime(time) {
 }
 
 async function asset(name, onProgress) {
-  const revision = name.endsWith('-motion.bin.gz') ? 4 : 2;
+  const revision = name.endsWith('-motion.bin.gz') ? 5 : 2;
   const response = await fetch(new URL(`assets/${name}?v=${revision}`, import.meta.url));
   if (!response.ok) throw new Error(`Unable to load ${name} (${response.status})`);
   let bytes;
