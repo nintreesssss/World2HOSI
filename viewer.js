@@ -24,7 +24,7 @@ function finishArrival() {
   for (const mesh of arrivalMeshes) mesh.updateVersion();
   for (const actor of actors.values()) {
     actor.mesh.visible = true;
-    for (const material of actor.mesh.material) { material.opacity = 1; material.transparent = false; material.depthWrite = true; material.needsUpdate = true; }
+    for (const material of actor.mesh.material) material.opacity = 1;
   }
   $('teaser').className = 'teaser is-ready'; $('teaser').setAttribute('aria-busy', 'false');
   $('load-status').textContent = '3D scene ready';
@@ -104,8 +104,11 @@ async function loadActor(track) {
   const base = { color, roughness: .58, metalness: .08 };
   const mesh = new THREE.SkinnedMesh(geometry, [new THREE.MeshStandardMaterial(base), new THREE.MeshStandardMaterial({ ...base, flatShading: true })]);
   mesh.frustumCulled = false;
-  mesh.visible = false;
-  for (const material of mesh.material) { material.transparent = true; material.opacity = 0; material.depthWrite = false; }
+  // Hashed coverage fades in the opaque pass: the Gaussian scene must still
+  // see each avatar's depth, including the distant blue actor in the corridor.
+  // Keep the same shader/material state through the end of the entrance.
+  mesh.visible = true;
+  for (const material of mesh.material) { material.alphaHash = true; material.opacity = 0; }
   const bones = Array.from({ length: 55 }, () => new THREE.Bone());
   bones.forEach(bone => mesh.add(bone));
   mesh.bind(new THREE.Skeleton(bones, bones.map(() => new THREE.Matrix4())), new THREE.Matrix4());
