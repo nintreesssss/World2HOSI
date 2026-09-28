@@ -14,10 +14,13 @@ main { max-width: 1336px; padding: 0 48px 64px; margin: auto; }
 /* A quiet, full-width title band and a typographic blue wordmark. */
 .paper-heading { text-align: center; padding: 58px 24px 42px; margin-bottom: 32px; background: radial-gradient(ellipse at 50% 0%, #e2edf8 0%, transparent 68%), linear-gradient(115deg, #f1f5f8, #f7f9fc 54%, #edf3f8); border-bottom: 1px solid #d9e4ee; }
 h1 { margin: 0; font-optical-sizing: auto; }
-.project-name { display: inline-block; padding: 0 .06em .07em; margin-bottom: 17px; font-size: clamp(3.7rem, 6.8vw, 6rem); line-height: 1.08; letter-spacing: -.055em; color: #3977b0; background: linear-gradient(110deg, #35699c 5%, #659aca 45%, #4c83b8 70%, #41679c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.project-name { display: inline-block; padding: 0 .06em .07em; margin-bottom: 17px; font-size: clamp(3.7rem, 6.8vw, 6rem); line-height: 1.08; letter-spacing: -.055em; color: #3977b0; }
+.wordmark-lettering { background: linear-gradient(110deg, #35699c 5%, #659aca 45%, #4c83b8 70%, #41679c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .wordmark-world { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; letter-spacing: -.065em; }
 .wordmark-two { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: .79em; padding-inline: .025em .055em; }
 .wordmark-hosi { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; letter-spacing: -.055em; }
+.wordmark-avatar { position: relative; display: inline-block; width: .43em; height: .7em; vertical-align: baseline; }
+.wordmark-avatar img { position: absolute; height: 1.04em; width: auto; max-width: none; bottom: -.025em; left: -.25em; user-select: none; pointer-events: none; }
 .paper-title { font-family: Georgia, "Times New Roman", serif; font-style: italic; display: block; max-width: 850px; margin: auto; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.5; letter-spacing: -.018em; font-weight: 400; color: #4e6175; text-wrap: balance; }
 .paper-links { display: flex; justify-content: center; gap: 12px; margin-top: 26px; }
 .paper-link { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 10px 22px; border: 1px solid #cbd9e6; border-radius: 999px; background: #ffffffb8; box-shadow: inset 0 1px 0 #fff, 0 2px 4px #344e6806; color: #375d81; font-size: .9375rem; line-height: 1.4; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform 220ms var(--ease-out), background 180ms ease, box-shadow 220ms ease, border-color 180ms ease; }
@@ -31,7 +34,7 @@ h1 { margin: 0; font-optical-sizing: auto; }
 .site-footer p { max-width: 1240px; margin: auto; font-size: .75rem; line-height: 1.5; letter-spacing: .005em; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
 .site-footer strong { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) { .paper-link { transition: none; } .paper-link:hover, .paper-link:active { transform: none; } }
-@media (forced-colors: active) { .project-name { background: none; -webkit-text-fill-color: CanvasText; } }
+@media (forced-colors: active) { .wordmark-lettering { background: none; -webkit-text-fill-color: CanvasText; } }
 .abstract-heading h2, .method-heading h2, .video-showcase > h2, .comparisons > h2 { color: #3977b0; font-family: inherit; font-style: normal; }
 .teaser { width: 100%; }
 .comparisons { max-width: 1112px; margin: 88px auto 16px; }
