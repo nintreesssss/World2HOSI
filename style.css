@@ -16,9 +16,9 @@ main { max-width: 1336px; padding: 0 48px 64px; margin: auto; }
 h1 { margin: 0; font-optical-sizing: auto; }
 .project-name { display: inline-block; padding: 0 .06em .07em; margin-bottom: 17px; font-size: clamp(3.7rem, 6.8vw, 6rem); line-height: 1.08; letter-spacing: -.055em; color: #3977b0; }
 .wordmark-lettering { position: relative; z-index: 2; display: inline-block; padding-right: .12em; margin-right: -.12em; background: linear-gradient(110deg, #35699c 5%, #659aca 45%, #4c83b8 70%, #41679c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.wordmark-world { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; letter-spacing: -.065em; }
-.wordmark-two { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: .79em; padding-inline: .025em .055em; }
-.wordmark-hosi { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; letter-spacing: -.055em; }
+.wordmark-world { font-family: Georgia, "Times New Roman", serif; font-style: normal; font-weight: 500; letter-spacing: -.065em; }
+.wordmark-two { font-family: Georgia, "Times New Roman", serif; font-style: normal; font-weight: 400; font-size: .79em; padding-inline: .025em .055em; }
+.wordmark-hosi { font-family: Georgia, "Times New Roman", serif; font-style: normal; font-weight: 500; letter-spacing: -.055em; }
 .wordmark-avatar { position: relative; z-index: 1; display: inline-block; width: .42em; height: .7em; vertical-align: baseline; }
 .wordmark-avatar img { position: absolute; height: .97em; width: auto; max-width: none; bottom: .005em; left: -.215em; user-select: none; pointer-events: none; }
 .paper-title { font-family: Georgia, "Times New Roman", serif; font-style: italic; display: block; max-width: 850px; margin: auto; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.5; letter-spacing: -.018em; font-weight: 400; color: #4e6175; text-wrap: balance; }
