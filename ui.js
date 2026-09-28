@@ -7,10 +7,12 @@ indicator.setAttribute('aria-hidden', 'true');
 actions.append(indicator);
 let selectionAnimation, positioned = false, pointerSelection = false;
 let gesture = null, suppressClickUntil = 0;
-function positionSelection(animate = false) {
+function positionSelection(animate = false, releaseVelocity = 0) {
   if (gesture?.dragging) return;
   const button = actions.querySelector('.active');
   if (!button) return;
+  // A queued selection mutation must not restart the release spring.
+  if (animate && selectionAnimation?.playState === 'running' && indicator.style.left === `${button.offsetLeft}px`) return;
   const previous = indicator.getBoundingClientRect();
   selectionAnimation?.cancel();
   indicator.style.left = `${button.offsetLeft}px`;
@@ -19,10 +21,19 @@ function positionSelection(animate = false) {
   indicator.style.height = `${button.offsetHeight}px`;
   const next = indicator.getBoundingClientRect();
   if (positioned && animate && !reducedMotion.matches) {
-    selectionAnimation = indicator.animate([
-      { transform: `translate(${previous.x - next.x}px, ${previous.y - next.y}px) scale(${previous.width / next.width}, ${previous.height / next.height})` },
-      { transform: 'translate(0, 0) scale(1)' }
-    ], { duration: 280, easing: 'cubic-bezier(.22,1,.36,1)' });
+    // Critically damped settling carries a small amount of release momentum.
+    // Only the lens moves: the chosen task never changes after pointer-up.
+    const offset = previous.x - next.x, omega = 25;
+    const velocity = Math.max(-420, Math.min(420, releaseVelocity));
+    const buttons = [...actions.querySelectorAll('[data-track]')];
+    const min = buttons[0].offsetLeft - button.offsetLeft;
+    const max = buttons.at(-1).offsetLeft - button.offsetLeft;
+    const frames = Array.from({ length: 31 }, (_, i) => {
+      const t = i * .016, decay = Math.exp(-omega * t);
+      const x = i === 30 ? 0 : Math.max(min, Math.min(max, (offset + (velocity + omega * offset) * t) * decay));
+      return { transform: `translateX(${x}px)` };
+    });
+    selectionAnimation = indicator.animate(frames, { duration: 480, easing: 'linear' });
   }
   positioned = true;
 }
@@ -34,6 +45,7 @@ new MutationObserver(() => positionSelection(pointerSelection)).observe(actions,
 new ResizeObserver(() => positionSelection(false)).observe(actions);
 document.fonts.ready.then(() => positionSelection(false));
 positionSelection(false);
+reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) positionSelection(false); });
 
 const actionButtons = [...actions.querySelectorAll('[data-track]')];
 function chooseDuringDrag(button) {
@@ -43,10 +55,11 @@ function chooseDuringDrag(button) {
 actions.addEventListener('pointerdown', event => {
   const button = event.target.closest('[data-track]');
   if (!button || button.disabled || event.button !== 0) return;
-  const rect = actions.getBoundingClientRect();
   const active = actions.querySelector('.active');
+  const lens = indicator.getBoundingClientRect();
   gesture = { pointerId: event.pointerId, startX: event.clientX, dragging: false, startId: active.dataset.track,
-    offset: button === active ? event.clientX - (rect.x + active.offsetLeft + active.offsetWidth / 2) : 0 };
+    samples: [],
+    offset: button === active ? event.clientX - (lens.x + lens.width / 2) : 0 };
 });
 actions.addEventListener('pointermove', event => {
   if (!gesture || event.pointerId !== gesture.pointerId) return;
@@ -59,6 +72,9 @@ actions.addEventListener('pointermove', event => {
   const rect = actions.getBoundingClientRect();
   const centers = actionButtons.map(button => button.offsetLeft + button.offsetWidth / 2);
   const x = Math.max(centers[0], Math.min(centers.at(-1), event.clientX - rect.x - gesture.offset));
+  const now = performance.now();
+  gesture.samples.push({ x, time: now });
+  gesture.samples = gesture.samples.filter(sample => now - sample.time < 90);
   const nearest = centers.reduce((best, center, i) => Math.abs(center - x) < Math.abs(centers[best] - x) ? i : best, 0);
   const button = actionButtons[nearest];
   indicator.style.left = `${x - button.offsetWidth / 2}px`;
@@ -75,7 +91,10 @@ function finishActionDrag(event, cancel = false) {
   if (finished.dragging) {
     suppressClickUntil = performance.now() + 350;
     if (cancel) chooseDuringDrag(actionButtons.find(button => button.dataset.track === finished.startId));
-    positionSelection(true);
+    const first = finished.samples[0], last = finished.samples.at(-1);
+    const velocity = !cancel && last && performance.now() - last.time < 100 && last.time - first.time > 8
+      ? (last.x - first.x) / (last.time - first.time) * 1000 : 0;
+    positionSelection(true, velocity);
   }
 }
 window.addEventListener('pointerup', event => finishActionDrag(event));
