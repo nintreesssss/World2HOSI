@@ -299,13 +299,13 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
 }
 .playback, .view-tools { isolation: isolate; }
 .playback { bottom: 46px; padding: 13px 18px; min-height: 72px; border-radius: 38px; }
-/* A clear center and a narrow curved rim keep the scene visible through the bar. */
+/* The center stays clear; curved edges carry the light and background bending. */
 .playback {
-  background: linear-gradient(175deg, #ffffff38, #edf1f51a 50%, #cbd4df26);
-  backdrop-filter: blur(5px) saturate(150%);
-  -webkit-backdrop-filter: blur(5px) saturate(150%);
-  border-color: #ffffffc7;
-  box-shadow: inset 0 2px 2px #fffffff0, inset 0 -2px 2px #7b8b9e24, inset 2px 0 3px #ffffffb8, inset -2px 0 3px #ffffff99, 0 5px 16px #23334c14, 0 1px 3px #23334c0d;
+  background: linear-gradient(180deg, #ffffff52, #ffffff0d 28%, #ced5df1c 72%, #ffffff66);
+  backdrop-filter: var(--rim-filter, blur(2px)) saturate(145%);
+  -webkit-backdrop-filter: var(--rim-filter, blur(2px)) saturate(145%);
+  border-color: #fffffff2;
+  box-shadow: inset 0 3px 2px #fffffff5, inset 0 -3px 3px #5a6d8438, inset 3px 0 4px #ffffffdb, inset -3px 0 4px #ffffffc7, 0 9px 24px #23334c1f, 0 2px 5px #23334c14;
 }
 .viewer-hint { bottom: 137px; }
 .playback::before, .view-tools::before, .selection-indicator::before {
@@ -323,8 +323,8 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
   opacity: .4; transition: opacity 180ms ease;
 }
 .playback.glass-hover::after, .view-tools.glass-hover::after { opacity: .9; }
-.playback::before { inset: 1px; padding: 1.5px; background: linear-gradient(170deg, #fffffff2, #ffffff14 32%, #b2becd38 60%, #ffffffcc 92%); }
-.playback::after { background: linear-gradient(180deg, #ffffff3d, #ffffff00 38%, #ffffff00 70%, #ffffff29); opacity: 1; }
+.playback::before { inset: 2px; padding: 2px; background: linear-gradient(165deg, #ffffff, #ffffff29 30%, #7b8ea657 56%, #ffffffeb 85%); }
+.playback::after { background: linear-gradient(180deg, #ffffff47, #ffffff00 23%, #ffffff00 78%, #ffffff52); opacity: 1; }
 .playback.glass-pressed, .view-tools.glass-pressed {
   box-shadow: inset 0 2px 5px #69778c24, inset 0 1px 1px #fff, inset 0 -1px 1px #ffffffd9, 0 4px 13px #28364b1a;
 }
@@ -336,16 +336,27 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
 .play-button::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(155deg, #fbfcff, #dce4ee 80%); opacity: 1; transition: opacity 240ms ease; }
 .play-button::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; border: 1px solid #ffffffd9; box-shadow: inset 0 1px 1px #fff, inset 0 -1px 2px #74839952; opacity: 0; transition: opacity 240ms ease; }
 .actions {
-  background: linear-gradient(175deg, #bdc6d21c, #e7ecf12e 55%, #a9b6c521);
-  border: 1px solid #ffffffd9;
+  background: linear-gradient(175deg, #8593a326, #d4dce524 48%, #96a5b526);
+  border: 1px solid #ffffffeb;
   backdrop-filter: blur(8px) saturate(145%);
   -webkit-backdrop-filter: blur(8px) saturate(145%);
-  box-shadow: inset 0 1px 2px #ffffffeb, inset 0 -1px 2px #8797ab1c, 0 5px 18px #28364b0c, 0 1px 3px #28364b0a;
+  box-shadow: inset 0 2px 2px #fffffff5, inset 0 -2px 2px #6579912b, inset 2px 0 3px #ffffffdb, 0 8px 22px #28364b12, 0 2px 4px #28364b0f;
 }
-.selection-indicator { isolation: isolate; background: #ffffff0a; backdrop-filter: none; -webkit-backdrop-filter: none; border-color: #ffffffdb; box-shadow: inset 0 1.5px 1px #fff, inset 0 -1.5px 2px #76839530, inset 1.5px 0 2px #ffffffb3, 0 3px 9px #28364b18, 0 1px 2px #28364b0d; transition: box-shadow 280ms ease; }
-.selection-indicator::after { background: linear-gradient(150deg, #ffffff66, #ffffff0a 52%, #d2dfef24); opacity: 1; transition: opacity 280ms ease; }
-.actions.is-scrubbing .selection-indicator::after, .actions:has(.action.is-pressed) .selection-indicator::after { opacity: 0; }
-.actions.is-scrubbing .selection-indicator { box-shadow: inset 0 2px 1px #fff, inset 0 -1.5px 2px #74839938, inset 1px 0 2px #ffffffcc, 0 4px 12px #24354e21; }
+.selection-indicator {
+  isolation: isolate; background: #ffffff12; backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-color: #fffffff5; border-radius: 25px; transform-origin: center;
+  scale: 1;
+  box-shadow: inset 0 2px 1px #fff, inset 0 -2px 2px #62768e52, inset 2px 0 3px #ffffffeb, inset -2px 0 3px #ffffffb3, 0 5px 12px #28364b29, 0 1px 3px #28364b1f;
+  transition: scale 420ms cubic-bezier(.2,.8,.2,1), box-shadow 280ms ease;
+}
+.selection-indicator::before { inset: 2px; padding: 1.5px; background: linear-gradient(145deg, #ffffff, #ffffff14 35%, #92a7bf6b 62%, #ffffffeb); }
+.selection-indicator::after { background: linear-gradient(165deg, #ffffff9e, #ffffff0a 35%, #99acc328 75%, #ffffff8c); opacity: .8; transition: opacity 280ms ease; }
+.actions.is-scrubbing .selection-indicator::after, .actions:has(.action.is-pressed) .selection-indicator::after { opacity: .2; }
+.actions.is-scrubbing .selection-indicator {
+  scale: var(--lens-stretch, 1.12) var(--lens-squash, .96);
+  transition: scale 100ms ease-out, box-shadow 180ms ease;
+  box-shadow: inset 0 2px 1px #fff, inset 0 -2px 3px #62768e66, inset 2px 0 3px #ffffffeb, 0 6px 14px #24354e2e;
+}
 .action.active { color: #171d28; font-weight: 600; }
 @media (hover: hover) and (pointer: fine) {
   #loop:hover::before { opacity: 0; }
@@ -357,7 +368,7 @@ select { transition: transform 220ms var(--ease-out), box-shadow 200ms ease, bac
   .play-button:hover { color: #263345; transform: translateY(-2px) scale(1.07); box-shadow: 0 3px 8px #24354e29; }
   .play-button:hover::before { opacity: 0; }
   .play-button:hover::after { opacity: 1; }
-  .actions:hover .selection-indicator::after { opacity: 0; }
+  .actions:hover .selection-indicator::after { opacity: .2; }
   .action:hover { transform: translateY(-2px); color: var(--ink); }
   .action:not(.active):hover { background: #ffffff47; box-shadow: inset 0 1px 1px #ffffffb3, 0 2px 6px #28364b09; }
   .action:hover .dot { transform: scale(1.3); box-shadow: 0 0 0 3px #00000006; }

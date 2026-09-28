@@ -23,7 +23,7 @@ function positionSelection(animate = false, releaseVelocity = 0) {
   if (positioned && animate && !reducedMotion.matches) {
     // Critically damped settling carries a small amount of release momentum.
     // Only the lens moves: the chosen task never changes after pointer-up.
-    const offset = previous.x - next.x, omega = 25;
+    const offset = previous.x + previous.width / 2 - next.x - next.width / 2, omega = 23;
     const velocity = Math.max(-420, Math.min(420, releaseVelocity));
     const buttons = [...actions.querySelectorAll('[data-track]')];
     const min = buttons[0].offsetLeft - button.offsetLeft;
@@ -73,6 +73,13 @@ actions.addEventListener('pointermove', event => {
   const centers = actionButtons.map(button => button.offsetLeft + button.offsetWidth / 2);
   const x = Math.max(centers[0], Math.min(centers.at(-1), event.clientX - rect.x - gesture.offset));
   const now = performance.now();
+  const last = gesture.samples.at(-1);
+  const speed = last ? Math.min(1, Math.abs(x - last.x) / Math.max(1, now - last.time)) : 0;
+  // Stretch the lens, never the color dots or the hit targets.
+  const edgeRoom = Math.max(0, Math.min(x - centers[0], centers.at(-1) - x));
+  const stretch = reducedMotion.matches ? 0 : Math.min(.1 + speed * .12, edgeRoom / 40);
+  indicator.style.setProperty('--lens-stretch', 1 + stretch);
+  indicator.style.setProperty('--lens-squash', 1 - stretch * .32);
   gesture.samples.push({ x, time: now });
   gesture.samples = gesture.samples.filter(sample => now - sample.time < 90);
   const nearest = centers.reduce((best, center, i) => Math.abs(center - x) < Math.abs(centers[best] - x) ? i : best, 0);
