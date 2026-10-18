@@ -31,7 +31,7 @@
       "fps": 30.000000000000107,
       "duration": 22.033333333333335,
       "geometry": "chair-geometry.json.gz",
-      "motion": "chair-motion.bin.gz"
+      "motion": "chair-motion.bin.gz?v=2"
     },
     {
       "id": "piano",
