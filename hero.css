@@ -1,0 +1,117 @@
+/* Share one stable viewport between the paper heading and interactive teaser. */
+.hero {
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+.hero .paper-heading {
+  margin: 0;
+  padding: clamp(14px, 2.2svh, 28px) 24px 12px;
+}
+.hero .project-name {
+  font-size: clamp(3rem, 7.6svh, 5.6rem);
+  margin-bottom: 8px;
+}
+.hero .paper-title {
+  font-size: clamp(1rem, 2.15svh, 1.5rem);
+  line-height: 1.35;
+}
+.hero .paper-authors {
+  margin: 12px auto 6px;
+  gap: 2px 15px;
+  font-size: clamp(.8125rem, 1.65svh, 1rem);
+  line-height: 1.5;
+}
+.hero .paper-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1px 16px;
+  max-width: 1060px;
+  margin: auto;
+  font-size: clamp(.6875rem, 1.3svh, .8125rem);
+  line-height: 1.6;
+}
+.hero .corresponding-author { margin-top: 4px; font-size: .6875rem; }
+.hero .paper-links { margin-top: 12px; gap: 10px; }
+.hero .paper-link { min-height: 36px; padding: 6px 18px; font-size: .8125rem; }
+.hero .teaser {
+  width: min(1240px, calc(100% - 64px));
+  min-height: 0;
+  margin: 0 auto;
+  padding-bottom: 8px;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 48px 36px;
+  gap: 8px;
+}
+.hero .viewer-shell { height: auto; min-height: 0; }
+.hero .playback {
+  bottom: 14px;
+  min-height: 58px;
+  padding: 7px 14px;
+}
+.hero .viewer-hint { bottom: 82px; }
+.hero .viewer-topbar { inset: 12px 14px auto; }
+.hero .actions { width: min(360px, 100%); margin: 0 auto; padding: 4px; }
+.hero .action { height: 38px; }
+.hero .caption-slot { height: auto; min-height: 0; margin: 0; padding: 0 8px; font-size: .8125rem; }
+.hero .caption { font-size: inherit; line-height: 1.4; }
+.hero .viewer-shell:fullscreen { width: 100vw; height: 100dvh; }
+
+@media (max-width: 760px) {
+  .hero { gap: 8px; }
+  .hero .paper-heading { padding: 14px 16px 10px; }
+  .hero .project-name { font-size: clamp(2.4rem, 10.8vw, 4rem); margin-bottom: 6px; }
+  .hero .paper-title { max-width: 600px; font-size: clamp(.8125rem, 3.3vw, 1.0625rem); line-height: 1.35; }
+  .hero .paper-authors { margin-top: 9px; margin-bottom: 5px; font-size: .75rem; gap: 1px 11px; line-height: 1.5; }
+  .hero .paper-affiliations { gap: 0 12px; font-size: .65625rem; line-height: 1.5; }
+  .hero .corresponding-author { margin-top: 4px; font-size: .625rem; }
+  .hero .paper-links { margin-top: 8px; gap: 8px; }
+  .hero .paper-link { min-height: 34px; padding: 5px 14px; font-size: .75rem; }
+  .hero .teaser { width: calc(100% - 24px); grid-template-rows: minmax(0, 1fr) 46px 44px; gap: 6px; padding-bottom: 6px; }
+  .hero .viewer-shell { border-radius: 22px; }
+  .hero .playback { width: calc(100% - 20px); bottom: 10px; gap: 0 7px; padding: 5px 10px 6px; min-height: 0; }
+  .hero .play-button { width: 34px; height: 34px; }
+  .hero .timeline-control { height: 20px; }
+  .hero #timeline { height: 20px; }
+  .hero .viewer-hint { bottom: 84px; padding: 5px 9px; }
+  .hero .viewer-topbar { inset: 8px 9px auto; }
+  .hero .view-tools { padding: 3px; }
+  .hero .view-tools button { height: 32px; min-width: 32px; }
+  .hero .actions { width: min(340px, 100%); }
+  .hero .action { height: 36px; }
+  .hero .caption-slot { font-size: .75rem; }
+}
+
+@media (max-width: 760px) and (max-height: 700px) {
+  .hero .paper-heading { padding-top: 10px; padding-bottom: 8px; }
+  .hero .project-name { font-size: clamp(2.2rem, 9.8vw, 3.3rem); margin-bottom: 3px; }
+  .hero .paper-title { font-size: .8125rem; }
+  .hero .paper-authors { margin-top: 6px; margin-bottom: 3px; font-size: .6875rem; gap: 1px 9px; }
+  .hero .paper-affiliations { font-size: .625rem; line-height: 1.4; }
+  .hero .corresponding-author { margin-top: 2px; }
+  .hero .paper-links { margin-top: 6px; }
+  .hero .teaser { grid-template-rows: minmax(0, 1fr) 42px 40px; gap: 5px; }
+  .hero .action { height: 32px; }
+  .hero .caption-slot { font-size: .6875rem; }
+}
+
+/* Short, wide viewports give the scene its own column instead of squeezing it. */
+@media (min-width: 640px) and (max-height: 520px) {
+  .hero { grid-template-columns: minmax(250px, 36%) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 8px; }
+  .hero .paper-heading { display: flex; flex-direction: column; justify-content: center; padding: 10px 12px; border-bottom: 0; border-right: 1px solid #d9e4ee; }
+  .hero .project-name { font-size: 2.4rem; margin-bottom: 5px; }
+  .hero .paper-title { font-size: .8125rem; }
+  .hero .desktop-break { display: none; }
+  .hero .paper-authors { margin: 8px auto 4px; font-size: .6875rem; gap: 1px 9px; line-height: 1.4; }
+  .hero .paper-affiliations { font-size: .625rem; line-height: 1.4; margin: 0 auto; }
+  .hero .corresponding-author { font-size: .625rem; margin-top: 3px; }
+  .hero .paper-links { margin-top: 8px; gap: 5px; }
+  .hero .paper-link { min-height: 32px; padding: 4px 9px; font-size: .6875rem; gap: 5px; }
+  .hero .teaser { width: calc(100% - 12px); padding: 8px 0 4px; grid-template-rows: minmax(0, 1fr) 42px 34px; gap: 5px; }
+  .hero .actions { width: min(320px, 100%); }
+  .hero .action { height: 32px; }
+  .hero .caption-slot { font-size: .6875rem; }
+}
