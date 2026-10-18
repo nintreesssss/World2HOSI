@@ -9,7 +9,7 @@ if (host && CSS.supports('backdrop-filter', 'url("#glass-rim")')) {
     return node;
   };
   const svg = element('svg', { width: 0, height: 0, 'aria-hidden': 'true', focusable: 'false' });
-  svg.style.cssText = 'position:absolute;pointer-events:none';
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:0;height:0;overflow:hidden;pointer-events:none';
   const defs = element('defs');
   const filter = element('filter', { id: 'glass-rim', filterUnits: 'userSpaceOnUse', x: 0, y: 0, 'color-interpolation-filters': 'sRGB' });
   const field = element('feImage', { result: 'rim', preserveAspectRatio: 'none' });
