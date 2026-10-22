@@ -34,3 +34,214 @@
     </nav>
   </header>
     <section class="teaser is-loading" id="teaser" aria-label="Interactive 3D teaser" aria-busy="true">
+      <div class="viewer-shell" id="viewer-shell">
+        <div id="viewport" role="img" aria-label="Interactive reconstructed home with six animated human-object interactions"></div>
+        <div class="viewer-topbar">
+          <div class="view-tools">
+            <button id="reset-camera" title="Reset the camera" aria-label="Reset camera" disabled><svg viewBox="0 0 24 24"><path d="M4 9a8 8 0 1 1 0 6M4 4v5h5"/></svg><span>Reset view</span></button>
+            <button id="fullscreen" title="Enter fullscreen" aria-label="Enter fullscreen"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+          </div>
+        </div>
+        <div class="loading" id="loading"><progress id="load-progress" max="100" value="0" aria-label="Loading 3D scene"></progress></div>
+        <span id="load-status" class="sr-only" role="status" aria-live="polite">Loading 3D scene</span>
+        <div class="viewer-hint" id="viewer-hint">Drag to explore <span>·</span> Scroll to zoom</div>
+      <div class="playback" aria-label="Animation playback controls">
+        <div class="transport">
+          <button id="play" class="play-button" aria-label="Play animation" disabled><svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4L13 7.5L13 16.5L7 20Z"/><path d="M13 7.5L20 12L20 12L13 16.5Z"/></svg></button>
+          <button id="replay" class="icon-button" aria-label="Replay from the beginning" title="Replay" disabled><svg viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 9M3 4v6h6"/></svg></button>
+          <div class="time-label"><span id="current-time">0:00.0</span><span class="time-separator">/</span><span id="duration">0:22.0</span></div>
+        </div>
+        <div class="timeline-control">
+          <span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span>
+          <input id="timeline" type="range" min="0" max="22.0333" step="0.01" value="0" aria-label="Animation time" disabled>
+          <span class="timeline-thumb" aria-hidden="true"></span>
+        </div>
+        <div class="play-options">
+          <div class="speed-control">
+            <label class="speed-label" for="speed">Speed</label><select id="speed" aria-label="Playback speed" disabled><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+            <button id="speed-toggle" aria-label="Playback speed, 1×" aria-haspopup="listbox" aria-expanded="false" aria-controls="speed-menu" hidden disabled><span id="speed-value">1×</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+            <div id="speed-menu" class="speed-menu" role="listbox" aria-label="Playback speed" aria-hidden="true" inert>
+              <button role="option" data-speed="0.5" aria-selected="false" tabindex="-1">0.5×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="1" aria-selected="true" tabindex="-1">1×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="1.5" aria-selected="false" tabindex="-1">1.5×<span aria-hidden="true">✓</span></button>
+              <button role="option" data-speed="2" aria-selected="false" tabindex="-1">2×<span aria-hidden="true">✓</span></button>
+            </div>
+          </div>
+          <button id="loop" class="icon-button" aria-label="Loop playback" aria-pressed="true" title="Loop playback" disabled><svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V8a2 2 0 0 1 2-2h16M7 22l-4-4 4-4m14-1v3a2 2 0 0 1-2 2H3"/></svg></button>
+        </div>
+      </div>
+      </div>
+      <div id="actions" class="actions" role="group" aria-label="Select an interaction to explore">
+        <button data-track="all" class="action active" aria-label="All actions" data-label="All actions" aria-pressed="true" disabled><span class="dot all-colors" aria-hidden="true"></span></button>
+        <button data-track="chair" class="action" aria-label="Move the chair" data-label="Move the chair" aria-pressed="false" disabled><span class="dot" style="--track-color:#3175b4" aria-hidden="true"></span></button>
+        <button data-track="piano" class="action" aria-label="Play the piano" data-label="Play the piano" aria-pressed="false" disabled><span class="dot" style="--track-color:#8958b9" aria-hidden="true"></span></button>
+        <button data-track="kitchen" class="action" aria-label="Wash the dishes" data-label="Wash the dishes" aria-pressed="false" disabled><span class="dot" style="--track-color:#d37536" aria-hidden="true"></span></button>
+        <button data-track="sofa" class="action" aria-label="Sit on the sofa" data-label="Sit on the sofa" aria-pressed="false" disabled><span class="dot" style="--track-color:#57994c" aria-hidden="true"></span></button>
+        <button data-track="fruit" class="action" aria-label="Carry the fruit" data-label="Carry the fruit" aria-pressed="false" disabled><span class="dot" style="--track-color:#319ba7" aria-hidden="true"></span></button>
+        <button data-track="bowl" class="action" aria-label="Inspect the bowl" data-label="Inspect the bowl" aria-pressed="false" disabled><span class="dot" style="--track-color:#bb4285" aria-hidden="true"></span></button>
+      </div>
+      <div class="caption-slot"><p id="action-caption" class="caption" aria-live="polite" hidden></p></div>
+    </section>
+  </div>
+  <main>
+    <section class="abstract" aria-labelledby="abstract-title">
+      <div class="abstract-heading">
+        <h2 id="abstract-title">Abstract</h2>
+      </div>
+      <div class="abstract-copy">
+        <p>Long-horizon human–object–scene interaction (HOSI) is central to embodied AI, animation, and game development. Existing human-object interaction (HOI) and human–scene interaction (HSI) models excel in their respective domains, but none alone covers tasks requiring multiple interaction skills. Training unified HOSI models is hindered by scarce and costly data.</p>
+        <p>We introduce <strong>World2HOSI</strong>, a multi-expert orchestration harness that generates continuous HOSI data from 3D Gaussian Splatting (3DGS) scenes and natural language instructions. Our key insight is that long-horizon HOSI hinges not on a stronger single model but on orchestration. Given a shared, structured scene state and an orchestration harness grounded in it, existing experts can jointly accomplish tasks beyond the reach of any of them alone. World2HOSI realizes this insight as a closed loop around a persistent scene state built from decoupled background and object assets. A harness plans action stages over this state, invokes experts via their native conditioning interfaces, and writes each action’s effects back, so that every invocation is grounded in the evolving world.</p>
+        <p>To reduce physical artifacts, bounded residual optimization and contact-driven physics simulation further ensure the physical plausibility of human motion and object manipulation, respectively, while preserving interaction intent. Experiments and a perceptual user study show that World2HOSI achieves the best task completion and interaction quality on the evaluated HOSI tasks, while generating more diverse data.</p>
+      </div>
+    </section>
+    <section class="method-overview" aria-labelledby="method-title">
+      <div class="method-heading"><h2 id="method-title">Pipeline</h2></div>
+      <figure class="pipeline-figure">
+        <a class="pipeline-open" href="assets/pipeline.webp" target="_blank" rel="noopener" aria-label="Enlarge the World2HOSI framework diagram">
+          <img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" decoding="async" alt="World2HOSI pipeline: scene standardization builds an Interactive Scene Package; the task planner compiles actions; navigation, HOI and HSI experts generate unified motion; residual correction and physical simulation refine execution. World updates feed back into planning.">
+          <span class="pipeline-enlarge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>Explore diagram</span>
+        </a>
+      </figure>
+    </section>
+    <section class="video-showcase" aria-labelledby="interaction-examples-title">
+      <h2 id="interaction-examples-title">Interaction examples</h2>
+      <section class="video-group" aria-labelledby="long-horizon-title"><h3 id="long-horizon-title">Long-horizon tasks</h3><div class="video-grid two wide">
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/long-coffee.webp" src="assets/videos/long-coffee.mp4" aria-label="Move, drink, and sit" aria-describedby="long-coffee-instruction" data-duration="40.75"></video>
+            <div class="video-controls" hidden>
+              <button class="video-toggle play-button" aria-label="Play Move, drink, and sit"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
+              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="40.75" value="0" step="0.01" aria-label="Seek Move, drink, and sit"><span class="timeline-thumb" aria-hidden="true"></span></div>
+              <span class="video-time">0:00 / 0:40</span>
+              <button class="video-fullscreen" aria-label="Fullscreen Move, drink, and sit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+            </div>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/long-coffee.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="long-coffee-instruction">Move the chair to the threshold, then walk over and take a sip of coffee. After finishing it, place the cup on the nearby table, and finally sit down in the chair.</p></figcaption>
+        </figure>
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/long-books.webp" src="assets/videos/long-books.mp4" aria-label="Carry, rearrange, and sit" aria-describedby="long-books-instruction" data-duration="42.933"></video>
+            <div class="video-controls" hidden>
+              <button class="video-toggle play-button" aria-label="Play Carry, rearrange, and sit"><svg class="video-play-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg><svg class="video-pause-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg></button>
+              <div class="video-timeline"><span class="timeline-rail" aria-hidden="true"><span class="timeline-fill"></span></span><input class="video-seek" type="range" min="0" max="42.933" value="0" step="0.01" aria-label="Seek Carry, rearrange, and sit"><span class="timeline-thumb" aria-hidden="true"></span></div>
+              <span class="video-time">0:00 / 0:42</span>
+              <button class="video-fullscreen" aria-label="Fullscreen Carry, rearrange, and sit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+            </div>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/long-books.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="long-books-instruction">Walk over and move the books to the table nearby, then walk over and adjust the stool, and finally sit down.</p></figcaption>
+        </figure>
+      </div></section>
+      <section class="video-group" aria-labelledby="examples-title"><h3 id="examples-title">Object and scene interactions</h3><div class="video-grid three">
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/chair.webp" src="assets/videos/chair.mp4" aria-label="Move a chair" aria-describedby="chair-instruction" data-duration="18.025"></video>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/chair.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="chair-instruction">Walk over to the chair, move it to the open area, and sit down.</p></figcaption>
+        </figure>
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/box.webp" src="assets/videos/box.mp4" aria-label="Carry a box" aria-describedby="box-instruction" data-duration="7.767"></video>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/box.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="box-instruction">Walk over to the box, pick it up, carry it along the counter, and put it down.</p></figcaption>
+        </figure>
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/real-world.webp" src="assets/videos/real-world.mp4" aria-label="Real-world interaction" aria-describedby="real-world-instruction" data-duration="13.533"></video>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/real-world.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="real-world-instruction">Walk around the tables, pick up the trash bin, and move it to the open area.</p></figcaption>
+        </figure>
+      </div></section>
+      <section class="video-group" aria-labelledby="physics-title"><h3 id="physics-title">Physics-based refinement</h3><div class="video-grid two physics">
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/physics-books.webp" src="assets/videos/physics-books.mp4" aria-label="Carry books" aria-describedby="physics-books-instruction" data-duration="17.7"></video>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-books.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="physics-books-instruction">Pick up the stack of books and carry it to the coffee table.</p></figcaption>
+        </figure>
+        <figure class="video-card">
+          <div class="video-player">
+            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/physics-bin.webp" src="assets/videos/physics-bin.mp4" aria-label="Move a bin" aria-describedby="physics-bin-instruction" data-duration="9.167"></video>
+            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-bin.mp4">Open video</a></p>
+          </div>
+          <figcaption><p id="physics-bin-instruction">Pick up the bin, carry it to the open area, and put it down.</p></figcaption>
+        </figure>
+      </div></section>
+    </section>
+    <section class="comparisons" aria-labelledby="comparisons-title">
+      <h2 id="comparisons-title">Comparison with baselines</h2>
+      <figure class="comparison-row" aria-describedby="compare-chair-task">
+        <div class="comparison-scroll" tabindex="0" aria-label="Move the chair, put it down, and sit on it. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+          <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-infbagel-poster.webp"><img src="assets/comparisons/chair-infbagel.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-hosig-poster.webp"><img src="assets/comparisons/chair-hosig.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-world2hosi-poster.webp?v=2"><img src="assets/comparisons/chair-world2hosi.webp?v=2" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
+          </div>
+        </div>
+        <figcaption id="compare-chair-task">Move the chair, put it down, and sit on it.</figcaption>
+      </figure>
+      <figure class="comparison-row" aria-describedby="compare-box-task">
+        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the box, carry it across the café, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+          <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-infbagel-poster.webp"><img src="assets/comparisons/box-infbagel.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping box task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-hosig-poster.webp"><img src="assets/comparisons/box-hosig.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping box task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-world2hosi-poster.webp"><img src="assets/comparisons/box-world2hosi.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping box task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
+          </div>
+        </div>
+        <figcaption id="compare-box-task">Pick up the box, carry it across the café, and put it down.</figcaption>
+      </figure>
+      <figure class="comparison-row" aria-describedby="compare-bin-task">
+        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the trash bin, carry it around the tables, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+          <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-infbagel-poster.webp"><img src="assets/comparisons/bin-infbagel.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">InfBaGel</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-hosig-poster.webp"><img src="assets/comparisons/bin-hosig.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="HOSIG independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">HOSIG</div>
+            </div>
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-world2hosi-poster.webp"><img src="assets/comparisons/bin-world2hosi.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
+            </div>
+          </div>
+        </div>
+        <figcaption id="compare-bin-task">Pick up the trash bin, carry it around the tables, and put it down.</figcaption>
+      </figure>
+    </section>
+  </main>
+  <footer class="site-footer"><p tabindex="0"><strong>World2HOSI:</strong> A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</p></footer>
+  <dialog class="pipeline-dialog" aria-labelledby="pipeline-dialog-title">
+    <div class="pipeline-toolbar"><h2 id="pipeline-dialog-title">Pipeline</h2><div><button id="pipeline-zoom" aria-pressed="false">Zoom in</button><button id="pipeline-close" aria-label="Close diagram" autofocus><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div></div>
+    <div class="pipeline-scroll" tabindex="0" aria-label="Pipeline diagram. Scroll to zoom, drag to pan. Use plus or minus to zoom, arrow keys to pan, and zero to reset."><img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" draggable="false" alt="Enlarged World2HOSI framework diagram. Scene standardization, task planning, multi-expert generation and physical simulation are connected through persistent world updates."></div>
+  </dialog>
+  <script type="module" src="ui.js?v=13"></script>
+  <script type="module" src="glass.js?v=2"></script>
+  <script type="module" src="viewer.js?v=19"></script>
+  <script type="module" src="videos.js?v=5"></script>
+</body>
+</html>
