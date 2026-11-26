@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI: A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=36">
+  <link rel="stylesheet" href="style.css?v=37">
   <link rel="stylesheet" href="hero.css?v=3">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
@@ -97,8 +97,8 @@
     <section class="method-overview" aria-labelledby="method-title">
       <div class="method-heading"><h2 id="method-title">Pipeline</h2></div>
       <figure class="pipeline-figure">
-        <a class="pipeline-open" href="assets/pipeline.webp" target="_blank" rel="noopener" aria-label="Enlarge the World2HOSI framework diagram">
-          <img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" decoding="async" alt="World2HOSI pipeline: scene standardization builds an Interactive Scene Package; the task planner compiles actions; navigation, HOI and HSI experts generate unified motion; residual correction and physical simulation refine execution. World updates feed back into planning.">
+        <a class="pipeline-open" href="assets/pipeline.webp?v=2" target="_blank" rel="noopener" aria-label="Enlarge the World2HOSI framework diagram">
+          <img src="assets/pipeline.webp?v=2" width="4080" height="1798" loading="lazy" decoding="async" alt="World2HOSI pipeline: scene standardization builds an Interactive Scene Package; the task planner compiles actions; navigation, HOI and HSI experts generate unified motion; residual correction and physical simulation refine execution. World updates feed back into planning.">
           <span class="pipeline-enlarge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>Explore diagram</span>
         </a>
       </figure>
@@ -161,8 +161,12 @@
     <section class="comparisons" aria-labelledby="comparisons-title">
       <h2 id="comparisons-title">Comparison with baselines</h2>
       <figure class="comparison-row" aria-describedby="compare-chair-task">
-        <div class="comparison-scroll" tabindex="0" aria-label="Move the chair, put it down, and sit on it. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+        <div class="comparison-scroll" tabindex="0" aria-label="Move the chair, put it down, and sit on it. Methods from left to right: GPT-6-Astra, InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-gpt6astra-poster.webp"><img src="assets/comparisons/chair-gpt6astra.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="GPT-6-Astra independently looping chair task comparison."></picture></div>
+              <div class="comparison-label">GPT-6-Astra</div>
+            </div>
             <div class="comparison-method">
               <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-infbagel-poster.webp"><img src="assets/comparisons/chair-infbagel.webp" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping chair task comparison."></picture></div>
               <div class="comparison-label">InfBaGel</div>
@@ -180,8 +184,12 @@
         <figcaption id="compare-chair-task">Move the chair, put it down, and sit on it.</figcaption>
       </figure>
       <figure class="comparison-row" aria-describedby="compare-box-task">
-        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the box, carry it across the café, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the box, carry it across the café, and put it down. Methods from left to right: GPT-6-Astra, InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-gpt6astra-poster.webp"><img src="assets/comparisons/box-gpt6astra.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="GPT-6-Astra independently looping box task comparison."></picture></div>
+              <div class="comparison-label">GPT-6-Astra</div>
+            </div>
             <div class="comparison-method">
               <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-infbagel-poster.webp"><img src="assets/comparisons/box-infbagel.webp" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping box task comparison."></picture></div>
               <div class="comparison-label">InfBaGel</div>
@@ -199,8 +207,12 @@
         <figcaption id="compare-box-task">Pick up the box, carry it across the café, and put it down.</figcaption>
       </figure>
       <figure class="comparison-row" aria-describedby="compare-bin-task">
-        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the trash bin, carry it around the tables, and put it down. Methods from left to right: InfBaGel, HOSIG, World2HOSI.">
+        <div class="comparison-scroll" tabindex="0" aria-label="Pick up the trash bin, carry it around the tables, and put it down. Methods from left to right: GPT-6-Astra, InfBaGel, HOSIG, World2HOSI.">
           <div class="comparison-strip">
+            <div class="comparison-method">
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-gpt6astra-poster.webp"><img src="assets/comparisons/bin-gpt6astra.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="GPT-6-Astra independently looping bin task comparison."></picture></div>
+              <div class="comparison-label">GPT-6-Astra</div>
+            </div>
             <div class="comparison-method">
               <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-infbagel-poster.webp"><img src="assets/comparisons/bin-infbagel.webp" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="InfBaGel independently looping bin task comparison."></picture></div>
               <div class="comparison-label">InfBaGel</div>
@@ -222,9 +234,9 @@
   <footer class="site-footer"><p tabindex="0"><strong>World2HOSI:</strong> A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</p></footer>
   <dialog class="pipeline-dialog" aria-labelledby="pipeline-dialog-title">
     <div class="pipeline-toolbar"><h2 id="pipeline-dialog-title">Pipeline</h2><div><button id="pipeline-zoom" aria-pressed="false">Zoom in</button><button id="pipeline-close" aria-label="Close diagram" autofocus><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div></div>
-    <div class="pipeline-scroll" tabindex="0" aria-label="Pipeline diagram. Scroll to zoom, drag to pan. Use plus or minus to zoom, arrow keys to pan, and zero to reset."><img src="assets/pipeline.webp" width="3330" height="1504" loading="lazy" draggable="false" alt="Enlarged World2HOSI framework diagram. Scene standardization, task planning, multi-expert generation and physical simulation are connected through persistent world updates."></div>
+    <div class="pipeline-scroll" tabindex="0" aria-label="Pipeline diagram. Scroll to zoom, drag to pan. Use plus or minus to zoom, arrow keys to pan, and zero to reset."><img src="assets/pipeline.webp?v=2" width="4080" height="1798" loading="lazy" draggable="false" alt="Enlarged World2HOSI framework diagram. Scene standardization, task planning, multi-expert generation and physical simulation are connected through persistent world updates."></div>
   </dialog>
-  <script type="module" src="ui.js?v=13"></script>
+  <script type="module" src="ui.js?v=14"></script>
   <script type="module" src="glass.js?v=2"></script>
   <script type="module" src="viewer.js?v=19"></script>
   <script type="module" src="videos.js?v=5"></script>

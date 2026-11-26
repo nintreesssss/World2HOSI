@@ -325,8 +325,9 @@ function drawFigure() {
 function fitFigure() {
   const w = pipelineScroll.clientWidth, h = pipelineScroll.clientHeight;
   if (!w || !h) return;
-  figureWidth = Math.min(w - 24, (h - 24) * 3330 / 1504);
-  figureHeight = figureWidth * 1504 / 3330;
+  const aspect = Number(pipelineImage.getAttribute("width")) / Number(pipelineImage.getAttribute("height"));
+  figureWidth = Math.min(w - 24, (h - 24) * aspect);
+  figureHeight = figureWidth / aspect;
   pipelineImage.style.width = `${figureWidth}px`;
   figureScale = 1; figureX = 0; figureY = 0;
   drawFigure();

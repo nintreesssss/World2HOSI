@@ -50,7 +50,7 @@ h1 { margin: 0; font-optical-sizing: auto; }
 .comparison-row { margin: 0 0 48px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .comparison-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #bbc5d2 transparent; }
 .comparison-scroll:focus-visible { outline: 2px solid #0071e3a0; outline-offset: -2px; border-radius: 12px; }
-.comparison-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.comparison-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .comparison-method { min-width: 0; }
 .comparison-label { padding: 12px 0 0; text-align: center; font-size: .9375rem; font-weight: 550; color: #495360; }
 .comparison-label small { font-size: inherit; font-weight: 400; color: #727b87; }
@@ -61,7 +61,7 @@ h1 { margin: 0; font-optical-sizing: auto; }
   .comparisons { margin-top: 56px; }
   .comparisons > h2 { margin: 0 4px 20px; font-size: 1.875rem; }
   .comparison-row { margin-bottom: 36px; }
-  .comparison-strip { min-width: 840px; }
+  .comparison-strip { min-width: 1120px; }
   .comparison-row figcaption { padding: 12px 0 0; text-align: center; }
 }
 .video-showcase { margin-top: 88px; }
