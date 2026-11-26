@@ -8,7 +8,7 @@
   <meta name="referrer" content="no-referrer">
   <title>World2HOSI: A Multi-Expert Harness for Long-Horizon Human-Object-Scene Interaction Generation</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="style.css?v=36">
   <link rel="stylesheet" href="hero.css?v=3">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/postprocessing/Pass.js":"./vendor/Pass.js","@sparkjsdev/spark":"./vendor/spark.module.js"}}</script>
 </head>
@@ -135,40 +135,25 @@
       </div></section>
       <section class="video-group" aria-labelledby="examples-title"><h3 id="examples-title">Object and scene interactions</h3><div class="video-grid three">
         <figure class="video-card">
-          <div class="video-player">
-            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/chair.webp?v=physics1" src="assets/videos/chair.mp4?v=physics1" aria-label="Move a chair" aria-describedby="chair-instruction" data-duration="36.033"></video>
-            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/chair.mp4?v=physics1">Open video</a></p>
-          </div>
+          <picture class="example-loop"><source media="(prefers-reduced-motion: reduce)" srcset="assets/videos/chair-loop-poster.webp"><img src="assets/videos/chair-loop.gif" width="480" height="320" alt="Move a chair" loading="lazy" decoding="async"></picture>
           <figcaption><p id="chair-instruction">Walk over to the chair, move it to the open area, and sit down.</p></figcaption>
         </figure>
         <figure class="video-card">
-          <div class="video-player">
-            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/box.webp?v=physics1" src="assets/videos/box.mp4?v=physics1" aria-label="Carry a box" aria-describedby="box-instruction" data-duration="10.367"></video>
-            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/box.mp4?v=physics1">Open video</a></p>
-          </div>
+          <picture class="example-loop"><source media="(prefers-reduced-motion: reduce)" srcset="assets/videos/box-loop-poster.webp"><img src="assets/videos/box-loop.gif" width="480" height="320" alt="Carry a box" loading="lazy" decoding="async"></picture>
           <figcaption><p id="box-instruction">Walk over to the box, pick it up, carry it along the counter, and put it down.</p></figcaption>
         </figure>
         <figure class="video-card">
-          <div class="video-player">
-            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/real-world.webp?v=physics1" src="assets/videos/real-world.mp4?v=physics1" aria-label="Real-world interaction" aria-describedby="real-world-instruction" data-duration="19.4"></video>
-            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/real-world.mp4?v=physics1">Open video</a></p>
-          </div>
+          <picture class="example-loop"><source media="(prefers-reduced-motion: reduce)" srcset="assets/videos/real-world-loop-poster.webp"><img src="assets/videos/real-world-loop.gif" width="480" height="320" alt="Real-world interaction" loading="lazy" decoding="async"></picture>
           <figcaption><p id="real-world-instruction">Walk around the tables, pick up the trash bin, and move it to the open area.</p></figcaption>
         </figure>
       </div></section>
       <section class="video-group" aria-labelledby="physics-title"><h3 id="physics-title">Physics-based refinement</h3><div class="video-grid two physics">
         <figure class="video-card">
-          <div class="video-player">
-            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/physics-books.webp?v=physics1" src="assets/videos/physics-books.mp4?v=physics1" aria-label="Carry books" aria-describedby="physics-books-instruction" data-duration="11.7"></video>
-            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-books.mp4?v=physics1">Open video</a></p>
-          </div>
+          <picture class="example-loop"><source media="(prefers-reduced-motion: reduce)" srcset="assets/videos/physics-books-loop-poster.webp"><img src="assets/videos/physics-books-loop.gif" width="480" height="360" alt="Carry books" loading="lazy" decoding="async"></picture>
           <figcaption><p id="physics-books-instruction">Pick up the stack of books and carry it to the coffee table.</p></figcaption>
         </figure>
         <figure class="video-card">
-          <div class="video-player">
-            <video controls autoplay loop playsinline muted preload="metadata" poster="assets/videos/physics-bin.webp?v=physics1" src="assets/videos/physics-bin.mp4?v=physics1" aria-label="Move a bin" aria-describedby="physics-bin-instruction" data-duration="9.167"></video>
-            <p class="video-error" role="status" hidden>Video could not load. <a href="assets/videos/physics-bin.mp4?v=physics1">Open video</a></p>
-          </div>
+          <picture class="example-loop"><source media="(prefers-reduced-motion: reduce)" srcset="assets/videos/physics-bin-loop-poster.webp"><img src="assets/videos/physics-bin-loop.gif" width="480" height="360" alt="Move a bin" loading="lazy" decoding="async"></picture>
           <figcaption><p id="physics-bin-instruction">Pick up the bin, carry it to the open area, and put it down.</p></figcaption>
         </figure>
       </div></section>
@@ -187,7 +172,7 @@
               <div class="comparison-label">HOSIG</div>
             </div>
             <div class="comparison-method">
-              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-world2hosi-poster.webp?v=physics1"><img src="assets/comparisons/chair-world2hosi.webp?v=physics1" width="640" height="527" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping chair task comparison."></picture></div>
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/chair-world2hosi-poster.webp?v=physics2"><img src="assets/comparisons/chair-world2hosi.webp?v=physics2" width="640" height="462" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping chair task comparison."></picture></div>
               <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
             </div>
           </div>
@@ -206,7 +191,7 @@
               <div class="comparison-label">HOSIG</div>
             </div>
             <div class="comparison-method">
-              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-world2hosi-poster.webp?v=physics1"><img src="assets/comparisons/box-world2hosi.webp?v=physics1" width="640" height="243" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping box task comparison."></picture></div>
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/box-world2hosi-poster.webp?v=physics2"><img src="assets/comparisons/box-world2hosi.webp?v=physics2" width="640" height="244" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping box task comparison."></picture></div>
               <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
             </div>
           </div>
@@ -225,7 +210,7 @@
               <div class="comparison-label">HOSIG</div>
             </div>
             <div class="comparison-method">
-              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-world2hosi-poster.webp?v=physics1"><img src="assets/comparisons/bin-world2hosi.webp?v=physics1" width="640" height="499" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping bin task comparison."></picture></div>
+              <div class="comparison-visual"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/comparisons/bin-world2hosi-poster.webp?v=physics2"><img src="assets/comparisons/bin-world2hosi.webp?v=physics2" width="640" height="500" loading="lazy" decoding="async" draggable="false" alt="World2HOSI independently looping bin task comparison."></picture></div>
               <div class="comparison-label">World2HOSI <small>(Ours)</small></div>
             </div>
           </div>
